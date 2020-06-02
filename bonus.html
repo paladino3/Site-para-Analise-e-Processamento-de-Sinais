@@ -1,0 +1,2328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Bonus</title>
+</head>
+
+<style>
+    * {
+	margin: 0px;
+	padding: 0px;
+}
+
+html, body {
+	overflow: hidden;
+}
+
+label {
+	display: inline-block;
+	font-weight: bold;
+	padding-left: 12px;
+	width: 80px;  /* 120px */
+}
+
+label2 {
+	display: inline-block;
+	font-weight: bold;
+	padding-left: 12px;
+	/*width: 120px; */
+}
+
+label3 {
+	display: inline-block;
+	font-weight: bold;
+	padding-left: 12px;
+	width: 100px;
+}
+
+label_normal {
+	display: inline-block;
+	font-weight: normal;
+	padding-left: 12px;
+}
+a {
+	display: inline-block;
+	margin: 3px 8px;
+	padding: 3px 4px;
+	border: 1px solid #888;
+	border-radius: 4px;
+	box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+	color: #444;
+	text-decoration: none;
+}
+a:hover {
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.8);	
+	background-color: #eee;
+	color: black;
+}
+
+input {
+	margin: 3px 6px;
+}
+
+.controlPanel {
+	border-top: 1px solid rgba(0,0,0,0.5);
+	padding: 5px 16px;
+}
+</style>
+
+<body>
+    <div id="main"></div>
+    <script src="js/bundle.js" charset="utf-8"></script>
+    
+    <img style="width: 0px;height: 0px;border-width:0px;" src="http://toplist.cz/count.asp?id=347858&amp;logo=mc&amp;http='+escape(document.referrer)+'&amp;wi='+escape(window.screen.width)+'&amp;he='+escape(window.screen.height)+'" alt="TOPlist" />
+    <noscript><img style="width: 0px;height: 0px;border-width:0px;" src="http://toplist.cz/count.asp?id=347858&amp;logo=mc" alt="TOPlist" /></noscript>
+
+
+    <script>
+        /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _Display = __webpack_require__(/*! ./Display.js */ 1);
+	
+	var _Display2 = _interopRequireDefault(_Display);
+	
+	var _Canvas = __webpack_require__(/*! ./Canvas.js */ 3);
+	
+	var _Canvas2 = _interopRequireDefault(_Canvas);
+	
+	var _Dom = __webpack_require__(/*! ./Dom.js */ 2);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// import { fft, util } from 'fft-js';
+	
+	// !!!!!!!!!! TODO
+	// print
+	// tutorialy
+	//
+	
+	// Vyřešeno
+	// dotykový displej - už funguje i drag. http://www.javascriptkit.com/javatutors/touchevents.shtml   https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
+	
+	// konstanty a počáteční nastavení
+	var Jazyk_cesky = 1;
+	
+	/** @jsx dom */
+	
+	var Jazyk_anglicky = 2;
+	
+	var jazyk = Jazyk_anglicky;
+	
+	var print = false; // nastaveno při printu
+	
+	var normalniFont = 'normal 12pt Calibri';
+	var backgroundColor = '#ffffff'; // Color.white;
+	var borderColor = '#000000'; // Color.black;
+	var deselectColor = '#0000ff'; // Color.blue;
+	var selectColor = '#ff0000'; // Color.red;
+	var signalColor = '#808080'; // Color.gray;
+	var componentColor = '#0000ff'; // Color.blue;
+	var driversColor = '#808080'; // Color.gray;
+	var axisColor = '#000000'; // Color.black;
+	var labelColor = '#000000'; // Color.black;
+	
+	var labelFshiftX = 30; // 30   or 130
+	var labelFshiftY = 80; // 80   or 50
+	
+	var labelFshiftX2 = 110;
+	var labelFshiftY2 = 100;
+	
+	var showAreaTahatek = true;
+	
+	var N = 256; //128;  // The number of period and spectrum samples (for Display), Falstad had 1024 = 2 ^ 10. It must be the power of two.
+	var sig = new Array(N).fill(0); // sig = new double[N]; // The intended signal
+	var SIG = new Array(2 * N).fill(0); // Spectrum of the Displayed signal (size N * 2)
+	var a = new Array(N).fill(0); // amplitude
+	var ph = new Array(N).fill(0); // phase
+	
+	var fftsig = new FFT(N); // Fourier for the Displayed signal
+	
+	var width, height;
+	
+	var calculated = false;
+	var tutorialOn = true;
+	var tutorialMessage = "";
+	var editingEnabled = true;
+	
+	var harmonics = 10; // The number of Displayed harmonics (I recommend 10, for more is the Display of chaos)
+	var harmonicsSound = 10; // The number of actually used harmonics for signal reconstruction
+	var hZobraz = 0; // Will be set up during the calculation
+	
+	var showPeriod = 2; // The number of Displayed basic harmonic periods
+	var verticalLines = 64; // The number of fill verticals per single harmonic period, N / verticalCar must be an integer.
+	var epsilon = 1e-2; // If the amplitude is less than epsilon, the phase will be reset
+	
+	var lineWidth = 4.0;
+	var markerSize = 10;
+	
+	var maxO = 2.0; // The maximum value of the axis, then it is all recalculated
+	var step = maxO / 10.0; // An empirically matched value, from which various shifts are further empirically derived. Not related to the number of harmonics, do not change!
+	var zScale = maxO / harmonics * 0.5;
+	
+	var borderTahatek = 0.5; // Relative + - to define a region from the center to the edge of the denture region. 0.5 means that the adjacent couples are continuously connected to each other
+	var borderMaxAmplitude = 2.0; // Maximum amplitude that can be set by dragging
+	
+	var aX = new Array(N / 2); // new double[N/2][4]; // A field for storing quadrant points for amplitude / phase dragging
+	var aY = new Array(N / 2); // new double[N/2][4];
+	var phX = new Array(N / 2); // new double[N/2][4];
+	var phY = new Array(N / 2); // new double[N/2][4];
+	for (var i = 0; i < N / 2; i++) {
+	    aX[i] = new Array(4).fill(0);
+	    aY[i] = new Array(4).fill(0);
+	    phX[i] = new Array(4).fill(0);
+	    phY[i] = new Array(4).fill(0);
+	}
+	
+	var sigX = new Array(4).fill(0); // An array for storing boundary points of a quadrilateral area for signal editing
+	var sigY = new Array(4).fill(0);
+	var selectedAmplitude = -1; // -1; // if >= 0, Color highlights amplitude with given index (calculated from zero)
+	var selectedPhase = -1; // if >= 0, Color highlights the phase with a given index (calculated from zero)
+	var selectedSignal = false;
+	var edit = false;
+	var editX = 0; // Mouse coordinates at the beginning of editing, a change in drag is counted against it, counted at run time
+	var editY = 0;
+	var editInitialAmplitude = 0.0;
+	var editInitialPhase = 0.0;
+	var ratioedit = 1.0; // The ratio between the pulling range when showing and pulling. E.g. 2 means that to change from min to max, you need to drag 2 times the max.
+	var deltaA = 0; // How much 1 pixel is, counting at run time
+	var deltaPh = 0; // How much is one pixel
+	var lastN = -1; // For editing the signal
+	var lastVal = -1.0; // For editing the signal
+	
+	var sigDisplay = new Array(N).fill(0); // Display signal reconstructed from variable harmonics
+	
+	var folder = new Array(N / 2); // new double[N/2][N]; // The field into which the individual harmonic components are stored during the calculation for later plotting
+	for (var _i = 0; _i < N / 2; _i++) {
+	    folder[_i] = new Array(N).fill(0);
+	}
+	var sigRemainder = new Array(N).fill(0); // The sum of the remaining harmonic components considered, which are not individually rendered
+	var SIGRemainder = new Array(2 * N).fill(0); // spektrum sigRemainder
+	
+	// konstanty pro sound
+	var soundCompatibility = false; // Is the sound in the browser supported?
+	var soundNotStarted = true; // Turns off when the audio is switched on for the first time
+	var soundTurnedOn = false;
+	
+	// začátek aplikace
+	
+	signalRectangularSine();
+	calculate();
+	//draw();
+	//console.log('Ahoj');
+	
+	// začátek soundu
+	//    calculatesound(): vše vypočte. Volá se jen ze turnOffSound( a z updateSound(
+	//    updateSound(): volá se při změně hlasitosti, f0 a při změně signálu ve funkci calculate(, když je hudba puštěná. Ve skutečnosti zavolá jen calculatesound()
+	//    turnOffSound(  volá se z formuláře při klepnutí na checkBox sound
+	
+	// window.AudioContext = window.AudioContext  || window.webkitAudioContext ; //  Toto akorát způsobilo, že se to načetlo na iPhone, ale zaseklo se dále. // Temporary work around until AudioContext is standardized
+	var ac;
+	var osc;
+	var fs = 0;
+	
+	var f0 = F0FromInt(zjistiF0Default()); // (Hz) Basic frequency (1st harmonic) for sound
+	var volumeMaxInt = 20;
+	var deltadB = 2.0; // How many dB change the scroll bar to one step
+	var volume = VolumeFromInt(15);
+	
+	if (window.AudioContext) {
+	    ac = new AudioContext();
+	
+	    fs = ac.sampleRate;
+	
+	    osc = ac.createOscillator();
+	
+	    if (osc) {
+	        soundCompatibility = true;
+	    }
+	}
+	
+	function turnOnFirstSound() {
+	    if (!soundCompatibility) {
+	        return;
+	    }
+	
+	    soundNotStarted = false;
+	
+	    /*
+	    osc.frequency.value = f0;
+	    var real = new Float32Array(2);
+	    var imag = new Float32Array(2);
+	    real[0] = 0;
+	    imag[0] = 0;
+	    real[1] = 1;
+	    imag[1] = 0;
+	    var wave = ac.createPeriodicWave(real, imag);
+	    osc.setPeriodicWave(wave);
+	    */
+	    calculatesound();
+	    osc.connect(ac.destination);
+	    osc.start();
+	}
+	
+	function turnOffSound() {
+	    if (!soundCompatibility) {
+	        return;
+	    }
+	
+	    if (soundTurnedOn) {
+	        updateSound();
+	        osc.connect(ac.destination);
+	    } else {
+	        osc.disconnect();
+	    }
+	}
+	
+	function VolumeFromInt(i) {
+	    if (i == 0) // mute
+	        return 0;
+	
+	    return Math.pow(10.0, deltadB * (i - volumeMaxInt) / 20.0);
+	}
+	
+	function VolumeIntFromVolume(vol) {
+	    if (vol < 1e-10) return 0;
+	
+	    var i = Math.round(20.0 * Math.log10(vol) / deltadB + volumeMaxInt);
+	    if (i < 0) i = 0;
+	    if (i > volumeMaxInt) i = volumeMaxInt;
+	
+	    return i;
+	}
+	
+	function F0FromInt(i) {
+	    return 440 * Math.pow(2, (i - 30) * 1 / 12); // 25 ... E (330) + 12 + 12 = max, -12 -12 = min, celkem 49, 30 ... A (440)
+	}
+	
+	function updateSound() {
+	    calculatesound();
+	}
+	
+	function calculatesound() {
+	    if (f0 * (harmonicsSound - 1) >= fs / 2.0) {
+	        // Control of sampling theorem
+	        //error('Pro f0New a zvolený počet harmonických harmonicsSound je porušen vzorkovací teorém')
+	        harmonicsSound = Math.floor(fs / 2.000001 / f0 + 1); //Possible adjustment of the number of harmonics
+	        lblHarmonicke.textContent = harmonicsSound - 1;
+	        harmonicSlider.value = harmonicsSound;
+	        calculate(); // Calculate calls itself again calculatesound()
+	        return;
+	    }
+	
+	    var GibbsCorrection = 1.2; // Correction of the Gibbs phenomenon when overshoot is about 18%
+	
+	    var limited = false;
+	    var maxvolclipped = 0;
+	    var maxvol = 0.9999999999;
+	    for (var _i2 = 0; _i2 < N; _i2++) {
+	        // Reconfigure the signal spectrum because it has long been converted to a signal
+	        //SIG[i*2] = sig[i] / N;
+	        SIG[_i2 * 2] = sig[_i2] / N / GibbsCorrection * volume;
+	        SIG[_i2 * 2 + 1] = 0;
+	
+	        if (SIG[_i2 * 2] * N > maxvol) {
+	            limited = true;
+	            maxvolclipped = Math.max(maxvolclipped, SIG[_i2 * 2] * N);
+	        } else if (SIG[_i2 * 2] * N < -maxvol) {
+	            limited = true;
+	            maxvolclipped = Math.max(maxvolclipped, -SIG[_i2 * 2] * N);
+	        }
+	    }
+	
+	    if (limited) {
+	        //console.log("[1]: " + maxvolclipped);
+	
+	        volume = volume / maxvolclipped * maxvol * maxvol; // I multiply twice for numerical errors so that it does not really exceed the max
+	        volumeSlider.value = VolumeIntFromVolume(volume);
+	
+	        //limited = false;
+	        //maxvolclipped = 0;
+	
+	        for (var _i3 = 0; _i3 < N; _i3++) {
+	            // Reconfigure the signal spectrum because it has long been converted to a signal
+	            //SIG[i*2] = sig[i] / N;
+	            SIG[_i3 * 2] = sig[_i3] / N / GibbsCorrection * volume;
+	            SIG[_i3 * 2 + 1] = 0;
+	            /*  
+	              if (SIG[i*2]*N > maxvol) {
+	                  limited = true;
+	                  maxvolclipped = Math.max(maxvolclipped, SIG[i*2]*N);
+	              }
+	              else if (SIG[i*2]*N < -maxvol) {
+	                  limited = true;
+	                  maxvolclipped = Math.max(maxvolclipped, -SIG[i*2]*N);
+	              }
+	              */
+	        }
+	
+	        /*if (limited) {
+	            console.log("[2]: " + maxvolclipped);
+	        }*/
+	    }
+	
+	    fftsig.transform(SIG, false);
+	
+	    // Here is a little different in jscript than in the original
+	    osc.frequency.value = f0;
+	
+	    var real = new Float32Array(harmonicsSound);
+	    var imag = new Float32Array(harmonicsSound);
+	    real[0] = 0; // D.C. component
+	    imag[0] = 0;
+	
+	    for (var _i4 = 1; _i4 < harmonicsSound; _i4++) {
+	        real[_i4] = SIG[2 * _i4]; // real
+	        imag[_i4] = SIG[2 * _i4 + 1]; // imag
+	    }
+	
+	    var wave = ac.createPeriodicWave(real, imag, { disableNormalization: true });
+	    osc.setPeriodicWave(wave);
+	}
+	
+	////// Rendering
+	
+	function drawLine(g, from, to) {
+	    g.beginPath();
+	    g.moveTo(from[0], from[1]);
+	    g.lineTo(to[0], to[1]);
+	    g.stroke();
+	}
+	
+	function draw() {
+	    width = _Canvas2.default.getWidth();
+	    height = _Canvas2.default.getHeight();
+	
+	    //canvas.drawCurve(sig, [0, 20]);
+	    //kresliRamecek();
+	
+	    // tady kreslit
+	    //let g = canvas.context;
+	
+	    //g.fillStyle = backgroundColor;  // g.setColor(backgroundColor);
+	    //g.beginPath();
+	
+	    var secondaryCanvas = document.createElement("canvas");
+	    secondaryCanvas.width = width;
+	    secondaryCanvas.height = height;
+	    var g = secondaryCanvas.getContext("2d");
+	    //let g = canvas.context;
+	
+	    g.fillStyle = backgroundColor;
+	    g.beginPath();
+	    g.rect(0, 0, width - 1, height - 1);
+	    g.fill();
+	    //if (!print) {
+	    //g.strokeStyle = borderColor;
+	    //    g.clearRect(0, 0, width-1, height-1);
+	    //g.stroke();
+	    //}
+	
+	    if (calculated === false) // ještě není vypočteno, není co vykreslovat
+	        return;
+	
+	    // %%% vodící čáry půlperiod
+	    /*for I = 0: showPeriod
+	        [x0, y0] = projectIso(maxO/showPeriod*I, 0, 0);
+	        [x1, y1] = projectIso(maxO/showPeriod*I, maxO*(hZobraz/harmonics), 0);
+	        plot([x0 x1], [y0 y1], ':', 'Color', sediva);
+	    end*/
+	
+	    var b0, b1, b2, b3;
+	
+	    //let orig_width = g.lineWidth; let orig_strokeStyle = g.strokeStyle; let orig_lineCap = g.lineCap; let orig_lineDash = g.getLineDash(); // store stroke
+	    var orig_lineDash = g.getLineDash(); // store stroke
+	
+	    g.setLineDash([3, 3]); //g2.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND, 10.0f, new float[] {3.0f, 3.0f}, 0.0f));
+	    g.strokeStyle = driversColor;
+	    for (var _i5 = 0; _i5 <= showPeriod; _i5++) {
+	        b0 = projectIso(maxO / showPeriod * _i5, 0, 0);
+	        b1 = projectIso(maxO / showPeriod * _i5, maxO * (hZobraz / harmonics), 0);
+	        drawLine(g, [b0.fX, b0.fY], [b1.fX, b1.fY]);
+	    }
+	
+	    //g.lineWidth = orig_width; g.strokeStyle = orig_strokeStyle; g.lineCap = orig_lineCap;  g.setLineDash(orig_lineDash); // restore stroke
+	    g.setLineDash(orig_lineDash); // restore stroke
+	
+	    // %%% osy
+	    var b000 = projectIso(0, 0, 0);
+	    var bx00 = projectIso(maxO, 0, 0);
+	    var b001 = projectIso(0, maxO / harmonics, 0);
+	    var bx01 = projectIso(maxO, maxO / harmonics, 0);
+	    var b0y0 = projectIso(0, maxO, 0);
+	    //Bod2D b00z = projectIso(0, 0, maxO);
+	
+	    g.strokeStyle = axisColor;
+	    drawLine(g, [b000.fX, b000.fY], [bx00.fX, bx00.fY]);
+	    drawLine(g, [b001.fX, b001.fY], [bx01.fX, bx01.fY]);
+	    drawLine(g, [b001.fX, b001.fY], [b0y0.fX, b0y0.fY]);
+	
+	    var c1, c2, c3, c4, c5, c6, c7, c8, c9, c10;
+	    c1 = projectIso(0, 0, zScale * borderMaxAmplitude);
+	    c2 = projectIso(maxO, 0, zScale * borderMaxAmplitude);
+	    c3 = projectIso(maxO, 0, -zScale * borderMaxAmplitude);
+	    c4 = projectIso(0, 0, -zScale * borderMaxAmplitude);
+	    c5 = projectIso(maxO / 2, 0, zScale * borderMaxAmplitude);
+	    c6 = projectIso(maxO / 2, 0, -zScale * borderMaxAmplitude);
+	    c7 = projectIso(maxO / 4, 0, zScale * borderMaxAmplitude);
+	    c8 = projectIso(maxO / 4, 0, -zScale * borderMaxAmplitude);
+	    c9 = projectIso(maxO * 3 / 4, 0, zScale * borderMaxAmplitude);
+	    c10 = projectIso(maxO * 3 / 4, 0, -zScale * borderMaxAmplitude);
+	
+	    sigX[0] = c1.X;sigY[0] = c1.Y;
+	    sigX[1] = c2.X;sigY[1] = c2.Y;
+	    sigX[2] = c3.X;sigY[2] = c3.Y;
+	    sigX[3] = c4.X;sigY[3] = c4.Y;
+	
+	    if (selectedSignal) {
+	        g.strokeStyle = selectColor;
+	
+	        drawLine(g, [c1.fX, c1.fY], [c2.fX, c2.fY]);
+	        drawLine(g, [c2.fX, c2.fY], [c3.fX, c3.fY]);
+	        drawLine(g, [c3.fX, c3.fY], [c4.fX, c4.fY]);
+	        drawLine(g, [c4.fX, c4.fY], [c1.fX, c1.fY]);
+	
+	        var _orig_lineDash = g.getLineDash(); // store stroke
+	        g.setLineDash([3, 3]);
+	
+	        drawLine(g, [c5.fX, c5.fY], [c6.fX, c6.fY]);
+	        drawLine(g, [c7.fX, c7.fY], [c8.fX, c8.fY]);
+	        drawLine(g, [c9.fX, c9.fY], [c10.fX, c10.fY]);
+	
+	        g.setLineDash(_orig_lineDash); // restore stroke
+	    }
+	
+	    // %%% složky
+	    var orig_lineCap = g.lineCap;
+	    g.lineCap = 'round';
+	    var n_scale = maxO / N / showPeriod;
+	
+	    for (var _i6 = 1; _i6 <= hZobraz; _i6++) {
+	        // "nulová" čára uprostřed každé složky
+	        if (_i6 != 1) {
+	            // DC složka leží na již dříve vykreslené ose, nemá smysl překreslovat
+	            b0 = projectIso(0, _i6 / harmonics * maxO, 0);
+	            b1 = projectIso((N * showPeriod - 1) * n_scale, _i6 / harmonics * maxO, 0);
+	            g.strokeStyle = axisColor;
+	            drawLine(g, [b0.fX, b0.fY], [b1.fX, b1.fY]);
+	        }
+	
+	        var hodnotyZobrazit;
+	        if (_i6 == hZobraz && harmonicsSound > harmonics) {
+	            hodnotyZobrazit = sigRemainder;
+	        } else {
+	            //zobrazfolder = zScale*repmat(folder(I, :), 1, showPeriod);
+	            hodnotyZobrazit = folder[_i6 - 1];
+	        }
+	
+	        g.strokeStyle = componentColor;
+	        b0 = projectIso(0, 0, 0); // zbytečné, vždy se nastaví v prvním běhu cyklu, ale code analyser tomu nevěří :-)
+	        for (var p = 0; p < showPeriod; p++) {
+	            for (var n = 0; n < N; n++) {
+	                if (p === 0 && n === 0) {
+	                    // první bod
+	                    b0 = projectIso((p * N + n) * n_scale, _i6 / harmonics * maxO, zScale * hodnotyZobrazit[n]); // poslední bod je první bod
+	                }
+	                b1 = projectIso((p * N + n) * n_scale, _i6 / harmonics * maxO, zScale * hodnotyZobrazit[n]);
+	
+	                drawLine(g, [b0.fX, b0.fY], [b1.fX, b1.fY]);
+	
+	                b0 = b1; // poslední bod
+	
+	                // % vertikální výplňové čárky složek
+	                if (n % (N / verticalLines) === 0) {
+	                    b2 = projectIso((p * N + n) * n_scale, _i6 / harmonics * maxO, 0);
+	                    drawLine(g, [b2.fX, b2.fY], [b1.fX, b1.fY]);
+	                }
+	            }
+	        }
+	    }
+	
+	    g.lineCap = orig_lineCap;
+	
+	    // amplitudy, fáze a popisky frekvencí
+	    g = kresliAmplitudyFaze(g);
+	
+	    // %%% signál 3D
+	    b0 = projectIso(0, 0, 0); // zbytečné, vždy se nastaví v prvním běhu cyklu, ale code analyser tomu nevěří :-)
+	    g.strokeStyle = signalColor;
+	    orig_lineCap = g.lineCap;
+	    var orig_width = g.lineWidth;
+	    g.lineCap = 'round';
+	    g.lineWidth = lineWidth;
+	
+	    for (var _p = 0; _p < showPeriod; _p++) {
+	        for (var _n = 0; _n < N; _n++) {
+	            if (_p === 0 && _n === 0) {
+	                b0 = projectIso((_p * N + _n) * n_scale, 0, zScale * sigDisplay[_n]); // poslední bod je první bod
+	                continue;
+	            }
+	            b1 = projectIso((_p * N + _n) * n_scale, 0, zScale * sigDisplay[_n]);
+	
+	            drawLine(g, [b0.fX, b0.fY], [b1.fX, b1.fY]);
+	
+	            b0 = b1; // poslední bod
+	        }
+	    }
+	    g.lineCap = orig_lineCap;
+	    g.lineWidth = orig_width;
+	    g.strokeStyle = labelColor;
+	    g.fillStyle = labelColor;
+	    g.font = normalniFont;
+	    g.fillText('Ʃ', b000.X - labelFshiftX * step, b000.Y + labelFshiftY * step);
+	
+	    // % šipka time
+	    b0 = projectIso(0, 0, -0.5 * 1.2 * step);
+	    b1 = projectIso(1.5 * step, 0, -0.5 * 1.2 * step);
+	    b2 = projectIso(1.5 * step - 0.2 * step, 0, -0.5 * 1.2 * step - 0.05 * step);
+	    b3 = projectIso(1.5 * step - 0.3 * step, 0, -0.5 * 1.2 * step + 0.05 * step);
+	    g.strokeStyle = labelColor;
+	    drawLine(g, [b0.fX, b0.fY], [b1.fX, b1.fY]);
+	    drawLine(g, [b1.fX, b1.fY], [b2.fX, b2.fY]);
+	    drawLine(g, [b1.fX, b1.fY], [b3.fX, b3.fY]);
+	
+	    g.save();g.translate(b3.X, b3.Y);g.rotate(-15.0 / 180.0 * Math.PI);
+	    var tTime = '';
+	    if (jazyk == Jazyk_anglicky) tTime = 'Time (sec)';else if (jazyk == Jazyk_cesky) tTime = 'Čas (s)';
+	
+	    g.fillText(tTime, -100 * step, -20 * step); // g.fillText(tTime, b3.X -100*step, b3.Y -20*step);
+	    g.restore();
+	    //g.rotate(15.0/180.0*Math.PI); g.translate(-b3.X, -b3.Y);     // opak předchozího
+	
+	    // % šipka frequency
+	    b0 = projectIso(0, 0, -0.5 * 1.2 * step);
+	    b1 = projectIso(0, 1.5 * step, -0.5 * 1.2 * step);
+	    b2 = projectIso(-0.1 * step, 1.5 * step - 0.3 * step, -0.5 * 1.2 * step);
+	    b3 = projectIso(+0.1 * step, 1.5 * step - 0.2 * step, -0.5 * 1.2 * step);
+	    g.strokeStyle = labelColor;
+	    drawLine(g, [b0.fX, b0.fY], [b1.fX, b1.fY]);
+	    drawLine(g, [b1.fX, b1.fY], [b2.fX, b2.fY]);
+	    drawLine(g, [b1.fX, b1.fY], [b3.fX, b3.fY]);
+	
+	    g.save();g.translate(b3.X, b3.Y);g.rotate(15.0 / 180.0 * Math.PI);
+	    var tFreq = '';
+	    if (jazyk == Jazyk_anglicky) tFreq = 'Frequency (Hz)';else if (jazyk == Jazyk_cesky) tFreq = 'Frekvence (Hz)';
+	
+	    g.fillText(tFreq, -150 * step, -30 * step);
+	    g.restore();
+	    //g.rotate(-15.0/180.0*Math.PI); g.translate(-b3.X, -b3.Y);
+	
+	    // % šipka magnitude
+	    b0 = projectIso(0, maxO + step, 0);
+	    b1 = projectIso(0, maxO + step, 1.2 * step);
+	    b2 = projectIso(0 - 0.05 * step, maxO + step, 1.2 * step - 0.2 * step);
+	    b3 = projectIso(0 + 0.05 * step, maxO + step, 1.2 * step - 0.2 * step);
+	    g.strokeStyle = labelColor;
+	    drawLine(g, [b0.fX, b0.fY], [b1.fX, b1.fY]);
+	    drawLine(g, [b1.fX, b1.fY], [b2.fX, b2.fY]);
+	    drawLine(g, [b1.fX, b1.fY], [b3.fX, b3.fY]);
+	
+	    var tMag = '';
+	    if (jazyk == Jazyk_anglicky) tMag = 'Magnitude';else if (jazyk == Jazyk_cesky) tMag = 'Amplituda';
+	
+	    g.fillText(tMag, b3.X + 20 * step, b3.Y + 30 * step);
+	
+	    // % šipka phase
+	    b0 = projectIso(0, maxO + step, 0);
+	    b1 = projectIso(-1.5 * step, maxO + step, 0);
+	    b2 = projectIso(-1.5 * step + 0.2 * step, maxO + step - 0.1 * step, 0);
+	    b3 = projectIso(-1.5 * step + 0.3 * step, maxO + step + 0.1 * step, 0);
+	    g.strokeStyle = labelColor;
+	    drawLine(g, [b0.fX, b0.fY], [b1.fX, b1.fY]);
+	    drawLine(g, [b1.fX, b1.fY], [b2.fX, b2.fY]);
+	    drawLine(g, [b1.fX, b1.fY], [b3.fX, b3.fY]);
+	
+	    g.save();g.translate(b3.X, b3.Y);g.rotate(-15.0 / 180.0 * Math.PI);
+	    var tPh = '';
+	    if (jazyk == Jazyk_anglicky) tPh = 'Phase (rad)';else if (jazyk == Jazyk_cesky) tPh = 'Fáze (rad)';
+	
+	    g.fillText(tPh, 0 * step, -30 * step);
+	    g.restore();
+	    //g.rotate(15.0/180.0*Math.PI); g.translate(-b3.X, -b3.Y);
+	
+	    if (tutorialOn) {
+	        g.fillText(tutorialMessage, b000.X, height - 20);
+	    }
+	
+	    if (print) {
+	        // výpis hodnot komponent
+	        for (var _i7 = 0; _i7 < N; _i7++) {
+	            SIG[_i7 * 2] = sig[_i7] / N;
+	            SIG[_i7 * 2 + 1] = 0;
+	        }
+	        fftsig.transform(SIG, false);
+	
+	        c4 = projectIso(0, 0, -zScale * borderMaxAmplitude);
+	        for (var _i8 = 0; _i8 < harmonicsSound; _i8++) {
+	            var amplprint = 2 * abs(SIG[2 * _i8], SIG[2 * _i8 + 1]); // one-sided
+	            var phaseprint = angle(SIG[2 * _i8], SIG[2 * _i8 + 1]);
+	
+	            if (phaseprint < 0) // korekce fáze na nezáporné hodnoty
+	                phaseprint += 2 * Math.PI;else if (phaseprint >= 2 * Math.PI) // korekce fáze na hodnoty pod 2pi
+	                phaseprint -= 2 * Math.PI;
+	
+	            g.fillText('a(' + _i8.toString() + ') = ' + amplprint.toFixed(5) + '    ph(' + _i8.toString() + ') = ' + (phaseprint / Math.PI).toFixed(5) + 'π', 20, c4.Y + (_i8 + 1) * 15);
+	        }
+	    }
+	
+	    var primaryCtx = _Canvas2.default.context;
+	    primaryCtx.drawImage(secondaryCanvas, 0, 0);
+	
+	    //canvas.context.drawImage(g);  // to prevent flickering
+	    //canvas.getContext("2d").drawImage(g);
+	}
+	
+	function kresliAmplitudyFaze(g) {
+	    var b0, b1A, b1Ph;
+	    var c1, c2, c3, c4; // hraniční body čtyřúhelníku okolo tahátek
+	
+	    g.font = normalniFont;
+	
+	    for (var _i9 = 1; _i9 <= hZobraz; _i9++) {
+	        b0 = projectIso(0, _i9 / harmonics * maxO, 0);
+	
+	        if (!(_i9 == hZobraz && harmonicsSound > harmonics)) {
+	            b1A = projectIso(0, _i9 / harmonics * maxO, zScale * a[_i9 - 1]);
+	            b1Ph = projectIso(-ph[_i9 - 1] / Math.PI * maxO / harmonics, _i9 / harmonics * maxO, 0);
+	
+	            if (_i9 - 1 == selectedAmplitude && _i9 - 1 != selectedPhase) {
+	                // nejdřív fáze, a pak amplituda
+	                //% fáze
+	                if (_i9 - 1 == selectedPhase) {
+	                    g.strokeStyle = selectColor;
+	                    g.fillStyle = selectColor;
+	                } else {
+	                    g.strokeStyle = deselectColor;
+	                    g.fillStyle = deselectColor;
+	                }
+	
+	                g.beginPath();
+	                g.arc(b1Ph.fX, b1Ph.fY, markerSize / 2, 0, 2 * Math.PI);
+	                g.fill();
+	
+	                var orig_width = g.lineWidth;g.lineWidth = lineWidth;
+	                drawLine(g, [b0.fX, b0.fY], [b1Ph.fX, b1Ph.fY]);
+	                g.lineWidth = orig_width;
+	
+	                //% amplituda
+	                if (_i9 - 1 == selectedAmplitude) {
+	                    g.strokeStyle = selectColor;
+	                    g.fillStyle = selectColor;
+	                } else {
+	                    g.strokeStyle = deselectColor;
+	                    g.fillStyle = deselectColor;
+	                }
+	
+	                g.beginPath();
+	                g.arc(b1A.fX, b1A.fY, markerSize / 2, 0, 2 * Math.PI);
+	                g.fill();
+	
+	                orig_width = g.lineWidth;g.lineWidth = lineWidth;
+	                drawLine(g, [b0.fX, b0.fY], [b1A.fX, b1A.fY]);
+	                g.lineWidth = orig_width;
+	            } else {
+	                // nejdřív amplituda, a pak fáze - aby případné obě nulové hodnoty nezpůsobily díky pořadí překreslení červené amplitudy modrou fází
+	                //% amplituda
+	                if (_i9 - 1 == selectedAmplitude) {
+	                    g.strokeStyle = selectColor;
+	                    g.fillStyle = selectColor;
+	                } else {
+	                    g.strokeStyle = deselectColor;
+	                    g.fillStyle = deselectColor;
+	                }
+	
+	                g.beginPath();
+	                g.arc(b1A.fX, b1A.fY, markerSize / 2, 0, 2 * Math.PI);
+	                g.fill();
+	
+	                var _orig_width = g.lineWidth;g.lineWidth = lineWidth;
+	                drawLine(g, [b0.fX, b0.fY], [b1A.fX, b1A.fY]);
+	                g.lineWidth = _orig_width;
+	
+	                //% fáze
+	                if (_i9 - 1 == selectedPhase) {
+	                    g.strokeStyle = selectColor;
+	                    g.fillStyle = selectColor;
+	                } else {
+	                    g.strokeStyle = deselectColor;
+	                    g.fillStyle = deselectColor;
+	                }
+	
+	                g.beginPath();
+	                g.arc(b1Ph.fX, b1Ph.fY, markerSize / 2, 0, 2 * Math.PI);
+	                g.fill();
+	
+	                _orig_width = g.lineWidth;g.lineWidth = lineWidth;
+	                drawLine(g, [b0.fX, b0.fY], [b1Ph.fX, b1Ph.fY]);
+	                g.lineWidth = _orig_width;
+	            }
+	
+	            // výpočet čtyřúhelníkové oblasti pro výběr tahátka amplitudy (použije se při nejbližším pohybu myši, který zajistí i případné překreslení)
+	            c1 = projectIso(0, (_i9 + borderTahatek) / harmonics * maxO, 0);
+	            c2 = projectIso(0, (_i9 - borderTahatek) / harmonics * maxO, 0);
+	            c3 = projectIso(0, (_i9 - borderTahatek) / harmonics * maxO, zScale * borderMaxAmplitude);
+	            c4 = projectIso(0, (_i9 + borderTahatek) / harmonics * maxO, zScale * borderMaxAmplitude);
+	            aX[_i9 - 1][0] = c1.X;aY[_i9 - 1][0] = c1.Y;
+	            aX[_i9 - 1][1] = c2.X;aY[_i9 - 1][1] = c2.Y;
+	            aX[_i9 - 1][2] = c3.X;aY[_i9 - 1][2] = c3.Y;
+	            aX[_i9 - 1][3] = c4.X;aY[_i9 - 1][3] = c4.Y;
+	
+	            if (showAreaTahatek && _i9 - 1 == selectedAmplitude) {
+	                g.strokeStyle = selectColor;
+	                g.fillStyle = selectColor;
+	                drawLine(g, [c1.fX, c1.fY], [c2.fX, c2.fY]);
+	                drawLine(g, [c2.fX, c2.fY], [c3.fX, c3.fY]);
+	                drawLine(g, [c3.fX, c3.fY], [c4.fX, c4.fY]);
+	                drawLine(g, [c4.fX, c4.fY], [c1.fX, c1.fY]);
+	
+	                //g.drawString(Tools.Num2Str(a[i-1], 3), c3.X, c4.Y);
+	                g.fillText(a[_i9 - 1].toFixed(3), c1.X, c2.Y - 4 * (c1.Y - c2.Y)); // bylo -3*()
+	            }
+	
+	            if (_i9 == 1) {
+	                // výpočet delta pro tahátka, stačí vždy pro jednu harmonickou, pro další je to stejné
+	                deltaA = borderMaxAmplitude / (c1.Y - c4.Y) / ratioedit;
+	            }
+	
+	            // výpočet čtyřúhelníkové oblasti pro výběr tahátka fáze (použije se při nejbližším pohybu myši, který zajistí i případné překreslení)
+	            c1 = projectIso(0, (_i9 + borderTahatek) / harmonics * maxO, 0);
+	            c2 = projectIso(0, (_i9 - borderTahatek) / harmonics * maxO, 0);
+	            c3 = projectIso(-2.0 * maxO / harmonics, (_i9 - borderTahatek) / harmonics * maxO, 0);
+	            c4 = projectIso(-2.0 * maxO / harmonics, (_i9 + borderTahatek) / harmonics * maxO, 0);
+	            phX[_i9 - 1][0] = c1.X;phY[_i9 - 1][0] = c1.Y;
+	            phX[_i9 - 1][1] = c2.X;phY[_i9 - 1][1] = c2.Y;
+	            phX[_i9 - 1][2] = c3.X;phY[_i9 - 1][2] = c3.Y;
+	            phX[_i9 - 1][3] = c4.X;phY[_i9 - 1][3] = c4.Y;
+	            if (showAreaTahatek && _i9 - 1 == selectedPhase) {
+	                g.strokeStyle = selectColor;
+	                g.fillStyle = selectColor;
+	                drawLine(g, [c1.fX, c1.fY], [c2.fX, c2.fY]);
+	                drawLine(g, [c2.fX, c2.fY], [c3.fX, c3.fY]);
+	                drawLine(g, [c3.fX, c3.fY], [c4.fX, c4.fY]);
+	                drawLine(g, [c4.fX, c4.fY], [c1.fX, c1.fY]);
+	
+	                g.fillText((ph[_i9 - 1] / Math.PI).toFixed(3) + 'π', c4.X, c3.Y - 2 * (c4.Y - c3.Y));
+	            }
+	
+	            if (_i9 == 1) {
+	                // výpočet delta pro tahátka, stačí vždy pro jednu harmonickou, pro další je to stejné
+	                deltaPh = 2.0 * Math.PI / (c1.X - c4.X) / ratioedit;
+	            }
+	        }
+	
+	        //% popisky frekvencí
+	        g.fillStyle = labelColor;
+	        var txt;
+	        if (_i9 == 1) txt = '0';else if (_i9 == hZobraz && harmonicsSound > harmonics) txt = 'Ʃ' + harmonics.toString() + '-' + (harmonicsSound - 1).toString() + 'f₀';else txt = (_i9 - 1).toString() + 'f₀';
+	
+	        if (_i9 == hZobraz && harmonicsSound > harmonics) g.fillText(txt, b0.X - labelFshiftX2 * step, b0.Y + labelFshiftY2 * step);else g.fillText(txt, b0.X - labelFshiftX * step, b0.Y + labelFshiftY * step);
+	        //text(x0(1) -0.05*step, y0(1) -0.15*step, txt)
+	    }
+	
+	    return g;
+	}
+	
+	function kresliRamecek() {
+	    width = _Canvas2.default.getWidth();
+	    height = _Canvas2.default.getHeight();
+	    _Canvas2.default.context.strokeStyle = componentColor;
+	
+	    drawLine(g, [0, 0], [width - 1, 0]);
+	    drawLine(g, [width - 1, 0], [width - 1, height - 1]);
+	    drawLine(g, [width - 1, height - 1], [0, height - 1]);
+	    drawLine(g, [0, height - 1], [0, 0]);
+	
+	    drawLine(g, [0, 0], [width - 1, height - 1]);
+	    drawLine(g, [width - 1, 0], [0, height - 1]);
+	}
+	
+	////// Výpočty
+	function calculate() {
+	    var bezPrekresli = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+	
+	    //System.out.println(".");
+	    // SIG = fft(sig)/N
+	    for (var _i10 = 0; _i10 < N; _i10++) {
+	        SIG[_i10 * 2] = sig[_i10] / N;
+	        SIG[_i10 * 2 + 1] = 0;
+	    }
+	    fftsig.transform(SIG, false);
+	    //for (int i = 0; i < 2*N; i++) {
+	    //    SIGRemainder[i] = SIG[i];
+	    //}
+	    SIGRemainder = SIG.slice(0); //System.arraycopy(SIG, 0, SIGRemainder, 0, 2*N); // src, srcPos, dest, destPos, length. zkopírujeme si spektrum pro pozdější výpočet sigRemainder
+	
+	    hZobraz = Math.min(harmonics, harmonicsSound); // zobrazovaných složek je vždy maximálně harmonics
+	
+	    // a = abs(SIG); ph = angle(SIG); Ale jen pro 1 až hZobraz
+	    a[0] = abs(SIG[0], SIG[1]);
+	    ph[0] = angle(SIG[0], SIG[1]);
+	    if (Math.abs(a[0]) < epsilon) // nulování fáze tam, kde je amplituda zanedbatelně malá
+	        ph[0] = 0;else if (ph[0] < 0) // korekce fáze na nezáporné hodnoty
+	        ph[0] += 2 * Math.PI;else if (ph[0] >= 2 * Math.PI) // korekce fáze na hodnoty pod 2pi
+	        ph[0] -= 2 * Math.PI;
+	
+	    if (Math.abs(ph[0] - 2 * Math.PI) < epsilon) ph[0] = 0;
+	
+	    for (var _i11 = 1; _i11 < hZobraz; _i11++) {
+	        a[_i11] = 2 * abs(SIG[2 * _i11], SIG[2 * _i11 + 1]); // one-sided
+	        ph[_i11] = angle(SIG[2 * _i11], SIG[2 * _i11 + 1]);
+	
+	        if (Math.abs(a[_i11]) < epsilon) // nulování fáze tam, kde je amplituda zanedbatelně malá
+	            ph[_i11] = 0;else if (ph[_i11] < 0) // korekce fáze na nezáporné hodnoty
+	            ph[_i11] += 2 * Math.PI;else if (ph[_i11] >= 2 * Math.PI) // korekce fáze na hodnoty pod 2pi
+	            ph[_i11] -= 2 * Math.PI;
+	
+	        if (Math.abs(ph[_i11] - 2 * Math.PI) < epsilon) ph[_i11] = 0;
+	    }
+	
+	    // výpočet složek
+	    for (var _i12 = 0; _i12 < hZobraz; _i12++) {
+	        for (var n = 0; n < N; n++) {
+	            folder[_i12][n] = a[_i12] * Math.cos(2.0 * Math.PI * _i12 * n / N + ph[_i12]);
+	        }
+	    }
+	
+	    // rekonstrukce signálu pomocí ifft
+	    // SIGDisplay = [SIG(1:harmonicsSound) zeros(1, N-(2*harmonicsSound-1)) SIG(N-harmonicsSound+2: end)]*N;
+	    // sig = ifft(SIGDisplay);
+	    for (var _i13 = 0; _i13 < N - (2 * harmonicsSound - 1); _i13++) {
+	        SIG[harmonicsSound * 2 + _i13 * 2] = 0;
+	        SIG[harmonicsSound * 2 + _i13 * 2 + 1] = 0;
+	    }
+	    fftsig.transform(SIG, true);
+	    for (var _i14 = 0; _i14 < N; _i14++) {
+	        sigDisplay[_i14] = SIG[_i14 * 2]; // jen reálné složky, imaginární by měly být nulové
+	    }
+	
+	    if (harmonicsSound > harmonics) {
+	        //SIGRemainder = [zeros(1, harmonics) SIG(harmonics+1:harmonicsSound) zeros(1, N-(2*harmonicsSound-1)) SIG(N-harmonicsSound+2: N-(harmonics+1)+2) zeros(1, harmonics-1)]*N;
+	        //sigRemainder = ifft(SIGRemainder);
+	        for (var _i15 = 0; _i15 < harmonics; _i15++) {
+	            SIGRemainder[_i15 * 2] = 0;
+	            SIGRemainder[_i15 * 2 + 1] = 0;
+	        }
+	        for (var _i16 = 0; _i16 < N - (2 * harmonicsSound - 1); _i16++) {
+	            SIGRemainder[harmonicsSound * 2 + _i16 * 2] = 0;
+	            SIGRemainder[harmonicsSound * 2 + _i16 * 2 + 1] = 0;
+	        }
+	        for (var _i17 = 0; _i17 < harmonics - 1; _i17++) {
+	            SIGRemainder[(_i17 + N - harmonics + 1) * 2] = 0;
+	            SIGRemainder[(_i17 + N - harmonics + 1) * 2 + 1] = 0;
+	        }
+	        fftsig.transform(SIGRemainder, true);
+	        for (var _i18 = 0; _i18 < N; _i18++) {
+	            sigRemainder[_i18] = SIGRemainder[_i18 * 2]; // jen reálné složky, imaginární by měly být nulové
+	        }
+	
+	        hZobraz = hZobraz + 1;
+	    }
+	
+	    if (soundTurnedOn) updateSound();
+	
+	    calculated = true;
+	    if (!bezPrekresli) {
+	        draw();
+	    }
+	}
+	
+	// index počítán od 0 (DC) výše
+	function zmenAmplituduAFazi(index, amplitude, phase) {
+	    var bezcalculate = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+	
+	    //sig -> spektrum, změnit -> sig, calculate()
+	    // SIG = fft(sig)/N
+	    for (var _i19 = 0; _i19 < N; _i19++) {
+	        SIG[_i19 * 2] = sig[_i19] / N;
+	        SIG[_i19 * 2 + 1] = 0;
+	    }
+	    fftsig.transform(SIG, false);
+	
+	    if (index !== 0) {
+	        var real = amplitude * 0.5 * Math.cos(phase);
+	        var imag = amplitude * 0.5 * Math.sin(phase);
+	
+	        SIG[index * 2] = real;
+	        SIG[index * 2 + 1] = imag;
+	
+	        SIG[(N - index) * 2] = real; // komplexně sdružený pár
+	        SIG[(N - index) * 2 + 1] = -imag;
+	    } else {
+	        // DC složka
+	        SIG[0] = phase < Math.PI / 2 ? amplitude : -amplitude; // zde to dělám jen binárně
+	        SIG[1] = 0;
+	    }
+	
+	    fftsig.transform(SIG, true);
+	    for (var _i20 = 0; _i20 < N; _i20++) {
+	        sig[_i20] = SIG[_i20 * 2];
+	    }
+	
+	    if (!bezcalculate) {
+	        calculate();
+	    }
+	}
+	
+	// if >= 0, barevně zvýrazní "tahátko" s daným indexem (počítání od nuly), if nechceme zvýraznit, nastavme na -1
+	function vyberAmplituduFazi(indAmplituda, indFaze) {
+	    selectedAmplitude = indAmplituda;
+	    selectedPhase = indFaze;
+	    draw();
+	}
+	
+	function zmenAmplitudu(i, znamenko) {
+	    var amplituda = a[i];
+	    var delta = 0.025;
+	    amplituda += delta * znamenko;
+	    if (amplituda < 0) amplituda = 0;
+	    if (amplituda > borderMaxAmplitude) amplituda = borderMaxAmplitude;
+	    zmenAmplituduAFazi(i, amplituda, ph[i]);
+	}
+	
+	function zmenFazi(i, znamenko) {
+	    var faze = ph[i];
+	    var delta = 0.02 * Math.PI;
+	    faze += delta * znamenko;
+	    /*
+	    if (faze < 0)
+	        faze = 0;
+	    if (faze >= 2.0*Math.PI)
+	        faze = 2.0*Math.PI - delta;
+	    */
+	    zmenAmplituduAFazi(i, a[i], faze);
+	}
+	
+	function changeHarmonics(harmonicsSoundNew) {
+	    // pozn. pro N = 8 máme 0=DC|1 2 3 |4| 5 6 7, kde 4 není zrcadlena.
+	    // povolením N/2 = 4 máme možnost hýbat jen s DC a 1 až 3, což je rozumné.
+	    if (harmonicsSoundNew > N / 2) {
+	        throw "harmonicsSound <= N/2";
+	    } else {
+	        harmonicsSound = harmonicsSoundNew;
+	        calculate();
+	    }
+	}
+	
+	////// Užitečné funkce a třídy
+	function abs(real, imag) {
+	    return Math.sqrt(real * real + imag * imag);
+	}
+	
+	function angle(real, imag) {
+	    return Math.atan2(imag, real);
+	}
+	
+	function Bod2D() {
+	    this.x = 0;
+	    this.y = 0;
+	
+	    this.X = 0; // přepočteno na obrazovku
+	    this.Y = 0; // přepočteno na obrazovku
+	
+	    this.fX = 0; // přesnější souřadnice
+	    this.fY = 0;
+	
+	    // přepočte bod na obrazovku
+	    this.prepocti = Bod2D_prepocti;
+	}
+	
+	function Bod2D_prepocti() {
+	    // všechna tato čísla jsou získána pokusem, smyslem je, aby při různých změnách velikosti plátna se obrázek vždy vešel na obrazovku
+	    var min = Math.min(width, height * 3);
+	    this.fX = this.x * min / 3.3 + width * 0.554;
+	    this.fY = -this.y * min / 3.3 + height * 0.75;
+	    //takto to bylo v Javě: this.X = this.fX.toFixed();
+	    //takto to bylo v Javě: this.Y = this.fY.toFixed();
+	    this.X = this.fX; // JavaScript: kvůli kompatibilitě s kreslením textů apod.
+	    this.Y = this.fY;
+	}
+	
+	function Bod3D() {
+	    this.x = 0;
+	    this.y = 0;
+	    this.z = 0;
+	
+	    this.X = 0; // na obrazovce
+	    this.Y = 0; // na obrazovce
+	    this.x2D = 0; // přepočteno na double formát
+	    this.y2D = 0; // přepočteno na double formát
+	
+	    // přepočte bod z obrazovky X, Y na double formát x2D, y2D. Ten je pak potřeba např. pomocí project projectIsoInvY0 přepočítat na 3D bod x, y, z, kde hodnotu jedné souřadnice předem známe
+	    this.prepocti = Bod3D_prepocti;
+	}
+	
+	function Bod3D_prepocti() {
+	    // všechna tato čísla jsou získána pokusem, smyslem je, aby při různých změnách velikosti plátna se obrázek vždy vešel na obrazovku
+	    var min = Math.min(width, height * 3);
+	    this.x2D = (this.X - width * 0.554) * 3.3 / min;
+	    this.y2D = -((this.Y - height * 0.75) * 3.3 / min);
+	}
+	
+	function projectIso(vX, vY, vZ) {
+	    // http://en.wikipedia.org/wiki/Isometric_projection
+	    // isometric projection
+	    // \y |z /x
+	    //  \ | /
+	    //   \|/
+	
+	    var al = Math.asin(Math.tan(15.0 / 180.0 * Math.PI));
+	    var be = 45.0 / 180.0 * Math.PI;
+	
+	    var t11 = Math.cos(be);
+	    var t12 = 0;
+	    var t13 = -Math.sin(be);
+	    var t21 = Math.sin(al) * Math.sin(be);
+	    var t22 = Math.cos(al);
+	    var t23 = Math.cos(be) * Math.sin(al);
+	    //final double t31 = Math.cos(al)*Math.sin(be);
+	    //final double t32 = -Math.sin(al);
+	    //final double t33 = Math.cos(al)*Math.cos(be);
+	
+	    var b = new Bod2D();
+	
+	    b.x = t11 * vX + t12 * vZ + t13 * vY;
+	    b.y = t21 * vX + t22 * vZ + t23 * vY;
+	    b.prepocti();
+	
+	    return b;
+	}
+	
+	// pro přepočet 3D signálu na 2D, tedy vY = 0
+	function projectIsoInvY0(x, y) {
+	    // http://en.wikipedia.org/wiki/Isometric_projection
+	    // isometric projection
+	    // \y |z /x
+	    //  \ | /
+	    //   \|/
+	
+	    var al = Math.asin(Math.tan(15.0 / 180.0 * Math.PI));
+	    var be = 45.0 / 180.0 * Math.PI;
+	
+	    var t11 = Math.cos(be);
+	    var t12 = 0;
+	    var t13 = -Math.sin(be);
+	    var t21 = Math.sin(al) * Math.sin(be);
+	    var t22 = Math.cos(al);
+	    var t23 = Math.cos(be) * Math.sin(al);
+	    //final double t31 = Math.cos(al)*Math.sin(be);
+	    //final double t32 = -Math.sin(al);
+	    //final double t33 = Math.cos(al)*Math.cos(be);
+	
+	    var b = new Bod3D();
+	    b.y = 0;
+	
+	    //x = t11*b.x + t12*b.z;
+	    //y = t21*b.x + t22*b.z;
+	    b.x = (t22 * x - t12 * y) / (t11 * t22 - t12 * t21);
+	    b.z = -(t21 * x - t11 * y) / (t11 * t22 - t12 * t21);
+	
+	    return b;
+	}
+	
+	// Řekne, zda bod leží uvnitř polynomu. if leží na hraně, vrátí false. Pro jednoduché případy není nutné opakovat první bod. Více viz www.
+	function pnpoly(nvert, vertx, verty, testx, testy) {
+	
+	    // optimalizace rychlosti, rychlý test, zda je bod definitivně vně
+	    var xmin = vertx[0];
+	    var xmax = vertx[0];
+	    var ymin = verty[0];
+	    var ymax = verty[0];
+	    for (var n = 1; n < nvert; n++) {
+	        if (vertx[n] < xmin) xmin = vertx[n];
+	        if (verty[n] < ymin) ymin = verty[n];
+	        if (vertx[n] > xmax) xmax = vertx[n];
+	        if (verty[n] > ymax) ymax = verty[n];
+	    }
+	    if (testx < xmin || testx > xmax || testy < ymin || testy > ymax) return false;
+	
+	    // toto je i samostatně fungující algoritmus, ale kvůli rychlosti jsou "jasné případy" vyloučeny horním testem rychleji
+	    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+	    var c = false;
+	    var j = nvert - 1;
+	    for (var _i21 = 0; _i21 < nvert; j = _i21++) {
+	        if (verty[_i21] > testy != verty[j] > testy && testx < (vertx[j] - vertx[_i21]) * (testy - verty[_i21]) / (verty[j] - verty[_i21]) + vertx[_i21]) c = !c;
+	    }
+	
+	    return c;
+	}
+	
+	function F0FromInt(i) {
+	    // 25 ... E (330) + 12 + 12 = max, -12 -12 = min, celkem 49, 30 ... A (440)
+	    return 440.0 * Math.pow(2.0, (i - 30) * 1.0 / 12.0);
+	}
+	
+	////// FFT
+	function FFT(sz) {
+	    this.size = sz;
+	
+	    if ((this.size & this.size - 1) !== 0) {
+	        throw "size must be power of two!";
+	    }
+	
+	    //calcWTable();  // void calcWTable()
+	    this.wtabf = new Array(this.size).fill(0);
+	    this.wtabi = new Array(this.size).fill(0);
+	
+	    for (var _i22 = 0; _i22 != this.size; _i22 += 2) {
+	        var th = Math.PI * _i22 / this.size;
+	        this.wtabi[_i22] = Math.cos(th);
+	        this.wtabi[_i22 + 1] = Math.sin(th);
+	        this.wtabf[_i22] = this.wtabi[_i22];
+	        this.wtabf[_i22 + 1] = -this.wtabi[_i22 + 1];
+	    }
+	
+	    this.transform = FFT_transform;
+	}
+	
+	function FFT_transform(data, inv) {
+	    var j = 0;
+	    var size2 = this.size * 2;
+	
+	    // bit-reversal
+	    for (var _i23 = 0; _i23 != size2; _i23 += 2) {
+	        if (_i23 > j) {
+	            var q = data[_i23];data[_i23] = data[j];data[j] = q;
+	            q = data[_i23 + 1];data[_i23 + 1] = data[j + 1];data[j + 1] = q;
+	        }
+	        // increment j by one, from the left side (bit-reversed)
+	        var bit = this.size;
+	        while ((bit & j) !== 0) {
+	            j &= ~bit;
+	            bit >>= 1;
+	        }
+	        j |= bit;
+	    }
+	
+	    // amount to skip through w table
+	    var tabskip = this.size << 1;
+	    var wtab = inv ? this.wtabi : this.wtabf;
+	
+	    var skip1, skip2, ix, j2;
+	    var wr, wi, d1r, d1i, d2r, d2i, d2wr, d2wi;
+	
+	    // unroll the first iteration of the main loop
+	    for (var _i24 = 0; _i24 != size2; _i24 += 4) {
+	        d1r = data[_i24];
+	        d1i = data[_i24 + 1];
+	        d2r = data[_i24 + 2];
+	        d2i = data[_i24 + 3];
+	        data[_i24] = d1r + d2r;
+	        data[_i24 + 1] = d1i + d2i;
+	        data[_i24 + 2] = d1r - d2r;
+	        data[_i24 + 3] = d1i - d2i;
+	    }
+	    tabskip >>= 1;
+	
+	    // unroll the second iteration of the main loop
+	    var imult = inv ? 1 : -1;
+	    for (var _i25 = 0; _i25 != size2; _i25 += 8) {
+	        d1r = data[_i25];
+	        d1i = data[_i25 + 1];
+	        d2r = data[_i25 + 4];
+	        d2i = data[_i25 + 5];
+	        data[_i25] = d1r + d2r;
+	        data[_i25 + 1] = d1i + d2i;
+	        data[_i25 + 4] = d1r - d2r;
+	        data[_i25 + 5] = d1i - d2i;
+	        d1r = data[_i25 + 2];
+	        d1i = data[_i25 + 3];
+	        d2r = data[_i25 + 6] * imult;
+	        d2i = data[_i25 + 7] * imult;
+	        data[_i25 + 2] = d1r - d2i;
+	        data[_i25 + 3] = d1i + d2r;
+	        data[_i25 + 6] = d1r + d2i;
+	        data[_i25 + 7] = d1i - d2r;
+	    }
+	    tabskip >>= 1;
+	
+	    for (skip1 = 16; skip1 <= size2; skip1 <<= 1) {
+	        // skip2 = length of subarrays we are combining
+	        // skip1 = length of subarray after combination
+	        skip2 = skip1 >> 1;
+	        tabskip >>= 1;
+	
+	        // for each subarray
+	        for (var _i26 = 0; _i26 < size2; _i26 += skip1) {
+	            ix = 0;
+	            // for each pair of complex numbers (one in each subarray)
+	            for (j = _i26; j != _i26 + skip2; j += 2, ix += tabskip) {
+	                wr = wtab[ix];
+	                wi = wtab[ix + 1];
+	                d1r = data[j];
+	                d1i = data[j + 1];
+	                j2 = j + skip2;
+	                d2r = data[j2];
+	                d2i = data[j2 + 1];
+	                d2wr = d2r * wr - d2i * wi;
+	                d2wi = d2r * wi + d2i * wr;
+	                data[j] = d1r + d2wr;
+	                data[j + 1] = d1i + d2wi;
+	                data[j2] = d1r - d2wr;
+	                data[j2 + 1] = d1i - d2wi;
+	            }
+	        }
+	    }
+	}
+	
+	////// signály
+	
+	function signalClear() {
+	    for (var _i27 = 0; _i27 < N; _i27++) {
+	        sig[_i27] = 0;
+	    }
+	}
+	
+	function signalCosinus() {
+	    for (var _i28 = 0; _i28 < N; _i28++) {
+	        sig[_i28] = Math.cos(2.0 * Math.PI * _i28 / N);
+	    }
+	}
+	
+	function signalSinus() {
+	    for (var _i29 = 0; _i29 < N; _i29++) {
+	        sig[_i29] = Math.sin(2.0 * Math.PI * _i29 / N);
+	    }
+	}
+	
+	function signalRectangularSine() {
+	    for (var _i30 = 0; _i30 < N / 2; _i30++) {
+	        sig[_i30] = 1;
+	    }for (var _i31 = N / 2; _i31 < N; _i31++) {
+	        sig[_i31] = -1;
+	    }
+	}
+	
+	function signalRectangularSineDC() {
+	    var DC = 0.2;
+	    for (var _i32 = 0; _i32 < N / 2; _i32++) {
+	        sig[_i32] = 1 + DC;
+	    }for (var _i33 = N / 2; _i33 < N; _i33++) {
+	        sig[_i33] = -1 + DC;
+	    }
+	}
+	
+	function signalObdelnikCosinus() {
+	    for (var _i34 = 0; _i34 < N / 4; _i34++) {
+	        sig[_i34] = 1;
+	    }for (var _i35 = N / 4; _i35 < N * 3 / 4; _i35++) {
+	        sig[_i35] = -1;
+	    }for (var _i36 = N * 3 / 4; _i36 < N; _i36++) {
+	        sig[_i36] = 1;
+	    }
+	}
+	
+	function signalPila() {
+	    for (var _i37 = 0; _i37 < N; _i37++) {
+	        sig[_i37] = -_i37 / (N / 2) + 1;
+	    } // původně bylo: -(double)i/(N/2) + 1
+	}
+	
+	function signalAbsAntiperiodic() {
+	    for (var _i38 = 0; _i38 < N / 2; _i38++) {
+	        sig[_i38] = (-_i38 / (N / 2) + 0.5 - 0.008) * 2;
+	    }for (var _i39 = N / 2; _i39 < N; _i39++) {
+	        sig[_i39] = (-(_i39 - N / 2) / (N / 2) + 0.5 - 0.008) * 2;
+	    }
+	}
+	
+	function signalTrojuhelnik() {
+	    for (var _i40 = 0; _i40 < N / 2; _i40++) {
+	        sig[_i40] = 2.0 * (-_i40 / (N / 2) + 0.5);
+	    }for (var _i41 = N / 2; _i41 < N; _i41++) {
+	        sig[_i41] = 2.0 * ((_i41 - N / 2) / (N / 2) - 0.5);
+	    }
+	}
+	
+	function signalRazy() {
+	    for (var _i42 = 0; _i42 < N * 2; _i42++) {
+	        SIG[_i42] = 0;
+	    }
+	    SIG[8 * 2] = 0.3;
+	    SIG[9 * 2] = 0.3;
+	    SIG[(N - 9) * 2] = 0.3;
+	    SIG[(N - 8) * 2] = 0.3;
+	
+	    fftsig.transform(SIG, true);
+	    for (var _i43 = 0; _i43 < N; _i43++) {
+	        sig[_i43] = SIG[_i43 * 2]; // jen reálné složky, imaginární by měly být nulové
+	    }
+	}
+	
+	function signalImpulsSin() {
+	    signalClear();
+	    for (var _i44 = N * 2 / 4; _i44 < N * 3 / 4; _i44++) {
+	        sig[_i44] = 2 * Math.sin(2.0 * Math.PI * 4.0 * _i44 / N);
+	    }
+	}
+	
+	///// Události Events
+	
+	// Touch events
+	_Canvas2.default.onTouchstart(function (position) {
+	    //console.log('Touchstart:', position);
+	
+	    // kombinace mousedown + mousemove (aby to vybarvilo vybrané šoupátko)
+	    mouseMove(position);
+	    mouseDown(position);
+	});
+	
+	_Canvas2.default.onTouchend(function (position) {
+	    //console.log('Touchend:', position);
+	
+	    // mouseup
+	    mouseUp(position);
+	});
+	
+	_Canvas2.default.onTouchcancel(function (position) {
+	    //console.log('Touchcancel:', position);
+	
+	    //mouseup
+	    mouseUp(position);
+	});
+	
+	_Canvas2.default.onTouchmove(function (position) {
+	    // console.log('onTouchmove:', position);
+	
+	    // mousemove
+	
+	    mouseMove(position);
+	});
+	
+	// Mouse events
+	var mousedrag = false;
+	
+	_Canvas2.default.onClick(function (position) {
+	    //console.log('Click:', position);
+	    //console.log(fftSample.length);
+	    //console.log(fftSample[5]);
+	});
+	
+	_Canvas2.default.onMousedown(function (position) {
+	    //console.log('Down:', position);
+	
+	    mouseDown(position);
+	});
+	
+	_Canvas2.default.onMouseup(function (position) {
+	    //console.log('Up:', position);
+	    mouseUp(position);
+	});
+	
+	_Canvas2.default.onMove(function (position) {
+	    //console.log('Move:', position, ' drag:', mousedrag);
+	
+	    mouseMove(position);
+	});
+	
+	function mouseUp(position) {
+	    mousedrag = false;
+	
+	    edit = false;
+	    lastN = -1; // pro editaci signálu
+	    lastVal = -1.0; // pro editaci signálu
+	}
+	
+	function mouseDown(position) {
+	    mousedrag = true;
+	
+	    if (!editingEnabled) return;
+	
+	    edit = true;
+	    editX = position[0];
+	    editY = position[1];
+	
+	    if (selectedAmplitude >= 0) {
+	        editInitialAmplitude = a[selectedAmplitude];
+	        editInitialPhase = ph[selectedAmplitude];
+	    } else if (selectedPhase >= 0) {
+	        editInitialAmplitude = a[selectedPhase];
+	        editInitialPhase = ph[selectedPhase];
+	    }
+	}
+	
+	function mouseMove(position) {
+	    if (!mousedrag) {
+	        // pohyb myši bez tlačítka
+	        if (!editingEnabled) return;
+	
+	        if (!edit) {
+	            // tato podmínka by měla být vždy splněna (vzhledem k rozlišení moved a dragged)
+	            var x = position[0];
+	            var y = position[1];
+	
+	            var indA = -1;
+	            var indPh = -1;
+	
+	            selectedSignal = pnpoly(4, sigX, sigY, x, y); // zjistí, zda je myš v oblasti edit signálu
+	
+	            var pocetTahatek = Math.min(harmonics, harmonicsSound);
+	
+	            for (var _i45 = 0; _i45 < pocetTahatek; _i45++) {
+	                if (pnpoly(4, aX[_i45], aY[_i45], x, y)) {
+	                    indA = _i45;
+	                    break;
+	                }
+	            }
+	
+	            for (var _i46 = 0; _i46 < pocetTahatek; _i46++) {
+	                if (pnpoly(4, phX[_i46], phY[_i46], x, y)) {
+	                    indPh = _i46;
+	                    break;
+	                }
+	            }
+	
+	            vyberAmplituduFazi(indA, indPh);
+	        }
+	    } else {
+	        // pohyb myši s tlačítkem
+	        if (!editingEnabled) return;
+	
+	        if (edit) {
+	            // tato podmínka by měla být vždy splněna (vzhledem k rozlišení moved a dragged)
+	            var dx = position[0] - editX; // kladná směrem doprava
+	            var dy = position[1] - editY; // kladná směrem dolů
+	
+	            if (selectedSignal) {
+	                sig = sigDisplay.slice(0); // System.arraycopy(sigDisplay, 0, sig, 0, N); // zkopírujeme aktuálně zobrazovaného signálu na ten, který chceme modelovat
+	                harmonicsSound = N / 2; // jinak se kreslí strašně špatně
+	                harmonicSlider.value = harmonicsSound;
+	                lblHarmonicke.textContent = harmonicsSound - 1; // jScrollBarHarmonicke.setValue(harmonicsSound);
+	                var b = new Bod3D();
+	                b.X = position[0];
+	                b.Y = position[1];
+	                b.prepocti();
+	                var b3 = projectIsoInvY0(b.x2D, b.y2D);
+	
+	                // b3.x = (p*N+n)*n_scale, b3.y = 0, b3.z = zScale*sigDisplay[n]
+	
+	                var n_scale = maxO / N / showPeriod;
+	
+	                var xMin = 0;
+	                var xMax = ((showPeriod - 1) * N + (N - 1)) * n_scale;
+	                if (b3.x < xMin || b3.x > xMax) // myš je z hlediska rozsahu časi mimo oblast
+	                    return;
+	
+	                var n = (b3.x / n_scale + 0.5).toFixed() % N; // +0.5 je jako round, abychom mohli vybrat jak první, tak poslední bod
+	                var val = b3.z / zScale;
+	
+	                if (val > borderMaxAmplitude) val = borderMaxAmplitude;
+	
+	                if (val < -borderMaxAmplitude) val = -borderMaxAmplitude;
+	
+	                sig[n] = val;
+	
+	                if (lastN != -1) {
+	                    // propojení bodů při rychlém pohybu myši
+	                    var n1, n2;
+	                    var val1, val2;
+	                    if (n <= lastN) {
+	                        n1 = n;
+	                        val1 = val;
+	                        n2 = lastN;
+	                        val2 = lastVal;
+	                    } else {
+	                        n1 = lastN;
+	                        val1 = lastVal;
+	                        n2 = n;
+	                        val2 = val;
+	                    }
+	                    if (n2 - n1 < N / 2) {
+	                        // ochrana proti přemazání 0...N při přechodu mezi periodami, kdy last je N-1 a nový je 0
+	                        for (var nmezi = n1 + 1; nmezi < n2; nmezi++) {
+	                            //sig[nmezi] = (val + lastVal) / 2.0;  // průměrná hodnota - dělá schody
+	                            sig[nmezi] = (nmezi - n1) * (val2 - val1) / (n2 - n1) + val1; // interpolace
+	                        }
+	                    } else {
+	                            // asi to bude přechod přes hranici period
+	                            for (var _nmezi = n2 + 1; _nmezi < N; _nmezi++) {
+	                                //sig[nmezi] = (val + lastVal) / 2.0;  // průměrná hodnota - dělá schody
+	                                sig[_nmezi] = (_nmezi - n2) * (val1 - val2) / (N - n2 + n1 + 1) + val2; // interpolace
+	                            }
+	                            for (var _nmezi2 = 0; _nmezi2 < n1; _nmezi2++) {
+	                                //sig[nmezi] = (val + lastVal) / 2.0;  // průměrná hodnota - dělá schody
+	                                sig[_nmezi2] = (_nmezi2 + N - n2) * (val1 - val2) / (N - n2 + n1 + 1) + val2; // interpolace
+	                            }
+	                        }
+	                }
+	
+	                calculate();
+	
+	                lastN = n;
+	                lastVal = val;
+	            } else if (selectedAmplitude >= 0) {
+	                var amplituda = editInitialAmplitude - dy * deltaA;
+	                if (amplituda < 0) amplituda = 0;
+	
+	                if (amplituda > borderMaxAmplitude) amplituda = borderMaxAmplitude;
+	
+	                zmenAmplituduAFazi(selectedAmplitude, amplituda, editInitialPhase);
+	            } else if (selectedPhase >= 0) {
+	                var faze = editInitialPhase - dx * deltaPh;
+	                if (faze < 0) faze = 0;
+	
+	                if (faze >= 2.0 * Math.PI) faze = 2.0 * Math.PI - deltaPh;
+	
+	                zmenAmplituduAFazi(selectedPhase, editInitialAmplitude, faze);
+	            }
+	        }
+	    }
+	}
+	
+	// other events
+	_Display2.default.onResize(function () {
+	    //console.log('resize');
+	    draw();
+	});
+	
+	function btnSignalClear() {
+	    signalClear();calculate();
+	}
+	
+	function btnSignalCosinus() {
+	    signalCosinus();calculate();
+	}
+	
+	function btnSignalSinus() {
+	    signalSinus();calculate();
+	}
+	
+	function btnSignalRectangularSine() {
+	    signalRectangularSine();calculate();
+	}
+	
+	function btnSignalObdelnikCosinus() {
+	    signalObdelnikCosinus();calculate();
+	}
+	
+	function btnSignalRazy() {
+	    signalRazy();calculate();
+	}
+	
+	function btnSignalPila() {
+	    signalPila();calculate();
+	}
+	
+	function btnSignalTrojuhelnik() {
+	    signalTrojuhelnik();calculate();
+	}
+	
+	function btnSignalImpulsSin() {
+	    signalImpulsSin();calculate();
+	}
+	
+	function btnSignalAbsAntiperiodic() {
+	    signalAbsAntiperiodic();calculate();
+	}
+	
+	function sliderHarmonic(value) {
+	    //console.log(value);
+	    changeHarmonics(value);
+	    lblHarmonicke.textContent = harmonicsSound - 1; //document.getElementById("lblHarmonicke").textContent = harmonicsSound-1;
+	}
+	
+	function btnHarmonicDefault() {
+	    changeHarmonics(harmonics);
+	    lblHarmonicke.textContent = harmonicsSound - 1;
+	    harmonicSlider.value = harmonicsSound;
+	}
+	
+	function chkSound(value) {
+	    if (!soundCompatibility) {
+	        checkSound.checked = false;
+	        soundTurnedOn = false;
+	        return;
+	    }
+	
+	    soundTurnedOn = value;
+	    //console.log(soundTurnedOn);
+	
+	    if (soundTurnedOn && soundNotStarted) {
+	        turnOnFirstSound();
+	    } else {
+	        turnOffSound();
+	    }
+	}
+	
+	function btnSound() {
+	    checkSound.checked = !checkSound.checked;
+	    chkSound(checkSound.checked); // sice jsem nastavil zaškrtnutí, ale tato funkce ošetřující událost se sama nezavolá
+	}
+	
+	function sliderVolume(value) {
+	    //console.log(value);
+	
+	    //f0 = F0FromInt(value);
+	    volume = VolumeFromInt(value);
+	    //console.log(volume)
+	    if (soundTurnedOn) {
+	        updateSound();
+	    }
+	}
+	
+	function sliderF0(value) {
+	    //console.log(value);
+	
+	    f0 = F0FromInt(value);
+	    lblF0.textContent = roundToOne(f0);
+	    if (soundTurnedOn) {
+	        updateSound();
+	    }
+	}
+	
+	function roundToOne(num) {
+	    return +(Math.round(num + "e+1") + "e-1");
+	}
+	
+	function zjistiF0Min() {
+	    return 1;
+	}
+	
+	function zjistiF0Max() {
+	    return 49;
+	}
+	
+	function zjistiF0Default() {
+	    return 25;
+	}
+	
+	function zmenF0(hodnotaPosuvnik) {
+	    lblF0.textContent = hodnotaPosuvnik;
+	    f0Slider.value = hodnotaPosuvnik;
+	    updateSound();
+	}
+	
+	function zmenHarmonicke(harmonickych) {
+	    changeHarmonics(harmonickych);
+	    lblHarmonicke.textContent = harmonicsSound - 1;
+	    harmonicSlider.value = harmonicsSound;
+	}
+	
+	// By Filip
+	
+	// až budu chtít CheckBox, tak přidat toto:
+	//    <label>CheckBox:</label>
+	//    <input type="checkbox" onchange={e => console.log(e.target.checked)}/>
+	
+	if (jazyk == Jazyk_cesky) {
+	    _Display2.default.appendToControlPanel((0, _Dom2.default)(
+	        'div',
+	        null,
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnSignalClear },
+	            'Smazat'
+	        ),
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnSignalCosinus },
+	            'Cosinus'
+	        ),
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnSignalSinus },
+	            'Sinus'
+	        ),
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnSignalRectangularSine },
+	            'Obdélník (sin)'
+	        ),
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnSignalObdelnikCosinus },
+	            'Obdélník (cos)'
+	        ),
+	        (0, _Dom2.default)('input', { id: 'harmonicSlider', type: 'range', value: harmonicsSound, min: '1', max: N / 2, oninput: function oninput(e) {
+	                return sliderHarmonic(e.target.value);
+	            }, onchange: function onchange(e) {
+	                return sliderHarmonic(e.target.value);
+	            } }),
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnHarmonicDefault },
+	            'Výchozích devět'
+	        ),
+	        (0, _Dom2.default)(
+	            'label2',
+	            null,
+	            'Harmonické: ',
+	            (0, _Dom2.default)(
+	                'span',
+	                { id: 'lblHarmonicke' },
+	                harmonicsSound - 1
+	            )
+	        ),
+	        (0, _Dom2.default)('br', null),
+	        (0, _Dom2.default)(
+	            'span',
+	            null,
+	            (0, _Dom2.default)(
+	                'a',
+	                { href: '#', onclick: btnSignalRazy },
+	                'Rázy'
+	            ),
+	            (0, _Dom2.default)(
+	                'a',
+	                { href: '#', onclick: btnSignalPila },
+	                'Pila'
+	            ),
+	            (0, _Dom2.default)(
+	                'a',
+	                { href: '#', onclick: btnSignalTrojuhelnik },
+	                'Trojúhelník'
+	            ),
+	            (0, _Dom2.default)(
+	                'a',
+	                { href: '#', onclick: btnSignalImpulsSin },
+	                'Impuls'
+	            ),
+	            (0, _Dom2.default)(
+	                'a',
+	                { href: '#', onclick: btnSignalAbsAntiperiodic },
+	                'Pila 2'
+	            ),
+	            (0, _Dom2.default)('input', { id: 'checkSound', type: 'checkbox', onchange: function onchange(e) {
+	                    return chkSound(e.target.checked);
+	                } }),
+	            (0, _Dom2.default)(
+	                'label',
+	                { onclick: btnSound },
+	                'sound'
+	            ),
+	            (0, _Dom2.default)('input', { id: 'volumeSlider', type: 'range', value: '15', min: '0', max: volumeMaxInt, oninput: function oninput(e) {
+	                    return sliderVolume(e.target.value);
+	                }, onchange: function onchange(e) {
+	                    return sliderVolume(e.target.value);
+	                } }),
+	            (0, _Dom2.default)(
+	                'label',
+	                null,
+	                'Hlasitost'
+	            ),
+	            (0, _Dom2.default)('input', { id: 'f0Slider', type: 'range', value: zjistiF0Default(), min: zjistiF0Min(), max: zjistiF0Max(), oninput: function oninput(e) {
+	                    return sliderF0(e.target.value);
+	                }, onchange: function onchange(e) {
+	                    return sliderF0(e.target.value);
+	                } }),
+	            (0, _Dom2.default)(
+	                'label3',
+	                null,
+	                'f0: ',
+	                (0, _Dom2.default)(
+	                    'span',
+	                    { id: 'lblF0' },
+	                    roundToOne(f0)
+	                ),
+	                ' Hz'
+	            ),
+	            (0, _Dom2.default)(
+	                'label_normal',
+	                null,
+	                'fs: ',
+	                fs,
+	                ' Hz'
+	            )
+	        ),
+	        (0, _Dom2.default)('br', null),
+	        (0, _Dom2.default)(
+	            'label_normal',
+	            null,
+	            '(c) Tomáš Bořil, borilt@gmail.com, 2016 Praha, v0.95. JavaScript & Canvas template: Filip Paulů.'
+	        )
+	    ));
+	} else if (jazyk == Jazyk_anglicky) {
+	    _Display2.default.appendToControlPanel((0, _Dom2.default)(
+	        'div',
+	        null,
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnSignalClear },
+	            'Clear'
+	        ),
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnSignalCosinus },
+	            'Cosine'
+	        ),
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnSignalSinus },
+	            'Sine'
+	        ),
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnSignalRectangularSine },
+	            'Square (sin)'
+	        ),
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnSignalObdelnikCosinus },
+	            'Square (cos)'
+	        ),
+	        (0, _Dom2.default)('input', { id: 'harmonicSlider', type: 'range', value: harmonicsSound, min: '1', max: N / 2, oninput: function oninput(e) {
+	                return sliderHarmonic(e.target.value);
+	            }, onchange: function onchange(e) {
+	                return sliderHarmonic(e.target.value);
+	            } }),
+	        (0, _Dom2.default)(
+	            'a',
+	            { href: '#', onclick: btnHarmonicDefault },
+	            'Default'
+	        ),
+	        (0, _Dom2.default)(
+	            'label2',
+	            null,
+	            'Harmonics: ',
+	            (0, _Dom2.default)(
+	                'span',
+	                { id: 'lblHarmonicke' },
+	                harmonicsSound - 1
+	            )
+	        ),
+	        (0, _Dom2.default)('br', null),
+	        (0, _Dom2.default)(
+	            'span',
+	            null,
+	            (0, _Dom2.default)(
+	                'a',
+	                { href: '#', onclick: btnSignalRazy },
+	                'Beats'
+	            ),
+	            (0, _Dom2.default)(
+	                'a',
+	                { href: '#', onclick: btnSignalPila },
+	                'Sawtooth'
+	            ),
+	            (0, _Dom2.default)(
+	                'a',
+	                { href: '#', onclick: btnSignalTrojuhelnik },
+	                'Triangle'
+	            ),
+	            (0, _Dom2.default)(
+	                'a',
+	                { href: '#', onclick: btnSignalImpulsSin },
+	                'Impulse'
+	            ),
+	            (0, _Dom2.default)(
+	                'a',
+	                { href: '#', onclick: btnSignalAbsAntiperiodic },
+	                'Sawtooth 2'
+	            ),
+	            (0, _Dom2.default)('input', { id: 'checkSound', type: 'checkbox', onchange: function onchange(e) {
+	                    return chkSound(e.target.checked);
+	                } }),
+	            (0, _Dom2.default)(
+	                'label',
+	                { onclick: btnSound },
+	                'Sound'
+	            ),
+	            (0, _Dom2.default)('input', { id: 'volumeSlider', type: 'range', value: '15', min: '0', max: volumeMaxInt, oninput: function oninput(e) {
+	                    return sliderVolume(e.target.value);
+	                }, onchange: function onchange(e) {
+	                    return sliderVolume(e.target.value);
+	                } }),
+	            (0, _Dom2.default)(
+	                'label',
+	                null,
+	                'Volume'
+	            ),
+	            (0, _Dom2.default)('input', { id: 'f0Slider', type: 'range', value: zjistiF0Default(), min: zjistiF0Min(), max: zjistiF0Max(), oninput: function oninput(e) {
+	                    return sliderF0(e.target.value);
+	                }, onchange: function onchange(e) {
+	                    return sliderF0(e.target.value);
+	                } }),
+	            (0, _Dom2.default)(
+	                'label3',
+	                null,
+	                'f0: ',
+	                (0, _Dom2.default)(
+	                    'span',
+	                    { id: 'lblF0' },
+	                    roundToOne(f0)
+	                ),
+	                ' Hz'
+	            ),
+	            (0, _Dom2.default)(
+	                'label_normal',
+	                null,
+	                'fs: ',
+	                fs,
+	                ' Hz'
+	            )
+	        ),
+	        (0, _Dom2.default)('br', null),
+	        (0, _Dom2.default)(
+	            'label_normal',
+	            null,
+	            '(c) Tomáš Bořil, borilt@gmail.com, 2016 Prague, v0.95. JavaScript & Canvas template: Filip Paulů.'
+	        )
+	    ));
+	}
+
+/***/ },
+/* 1 */
+/*!************************!*\
+  !*** ./src/Display.js ***!
+  \************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /** @jsx dom */
+	
+	
+	var _Dom = __webpack_require__(/*! ./Dom.js */ 2);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Display = function () {
+	    function Display() {
+	        _classCallCheck(this, Display);
+	
+	        this.main = this.getId('main');
+	        this.canvas = (0, _Dom2.default)('canvas', null);
+	
+	        this.controlPanel = (0, _Dom2.default)('div', { className: 'controlPanel' });
+	
+	        this.append(this.main, (0, _Dom2.default)(
+	            'div',
+	            null,
+	            this.canvas,
+	            this.controlPanel
+	        ));
+	
+	        window.addEventListener('resize', this.handleResize.bind(this));
+	        this.handleResize();
+	    }
+	
+	    _createClass(Display, [{
+	        key: 'onResize',
+	        value: function onResize(fn) {
+	            window.addEventListener('resize', fn);
+	        }
+	    }, {
+	        key: 'append',
+	        value: function append(parent, element) {
+	            parent.appendChild(element);
+	        }
+	    }, {
+	        key: 'appendToControlPanel',
+	        value: function appendToControlPanel(element) {
+	            this.append(this.controlPanel, element);
+	        }
+	    }, {
+	        key: 'getId',
+	        value: function getId(id) {
+	            return document.getElementById(id);
+	        }
+	    }, {
+	        key: 'getBodySize',
+	        value: function getBodySize() {
+	            return {
+	                width: window.innerWidth,
+	                height: window.innerHeight
+	            };
+	        }
+	    }, {
+	        key: 'handleResize',
+	        value: function handleResize() {
+	            var _getBodySize = this.getBodySize();
+	
+	            var width = _getBodySize.width;
+	            var height = _getBodySize.height;
+	
+	
+	            var panelHeight = 125; // bylo 200
+	            // set canvas size
+	            this.canvas.width = width;
+	            this.canvas.height = height - panelHeight;
+	        }
+	    }]);
+	
+	    return Display;
+	}();
+	
+	exports.default = new Display();
+
+/***/ },
+/* 2 */
+/*!********************!*\
+  !*** ./src/Dom.js ***!
+  \********************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = dom;
+	function dom(tag, properties) {
+	    var element = void 0;
+	    if (tag == 'svg' || tag == 'g' || tag == 'polygon' || tag == 'path') {
+	        // SVG
+	        element = document.createElementNS("http://www.w3.org/2000/svg", tag);
+	    } else {
+	        // HTML
+	        element = document.createElement(tag);
+	    }
+	    for (var key in properties) {
+	        if (key == 'style') {
+	            for (var label in properties[key]) {
+	                element.style[label] = properties[key][label];
+	            }
+	        } else {
+	            if (tag == 'svg' || tag == 'g' || tag == 'polygon' || tag == 'path') {
+	                // SVG
+	                if (key == 'onclick') {
+	                    element.onclick = properties[key];
+	                } else {
+	                    element.setAttribute(key, properties[key]);
+	                }
+	            } else {
+	                // HTML
+	                if (key == 'onmousewheel') {
+	                    // IE9, Chrome, Safari, Opera
+	                    element.addEventListener("mousewheel", mouseWheelHandler(properties[key]), false);
+	                    // Firefox
+	                    element.addEventListener("DOMMouseScroll", mouseWheelHandler(properties[key]), false);
+	                } else {
+	                    element[key] = properties[key];
+	                }
+	            }
+	        }
+	    }
+	
+	    var inners = [];
+	    for (var _key in arguments) {
+	        inners.push(arguments[_key]);
+	    }inners.splice(0, 2);
+	    if (Array.isArray(inners[0])) {
+	        inners = inners[0];
+	    }
+	    inners.forEach(function (inner) {
+	        if (typeof inner !== 'undefined') {
+	            if (typeof inner === 'string' || typeof inner === 'number') {
+	                inner = document.createTextNode(inner);
+	            }
+	            element.appendChild(inner);
+	        }
+	    });
+	
+	    return element;
+	};
+
+/***/ },
+/* 3 */
+/*!***********************!*\
+  !*** ./src/Canvas.js ***!
+  \***********************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _Display = __webpack_require__(/*! ./Display.js */ 1);
+	
+	var _Display2 = _interopRequireDefault(_Display);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Canvas = function () {
+	    function Canvas() {
+	        _classCallCheck(this, Canvas);
+	
+	        this.canvas = _Display2.default.canvas;
+	        this.context = this.canvas.getContext('2d');
+	    }
+	
+	    _createClass(Canvas, [{
+	        key: 'onClick',
+	        value: function onClick(fn) {
+	            this.canvas.onclick = function (e) {
+	                fn([e.pageX, e.pageY]), e.preventDefault();
+	            };
+	        }
+	    }, {
+	        key: 'onDragstart',
+	        value: function onDragstart(fn) {
+	            // toto je tu přidáno jen kvůli tomu, aby se přepsala defaultní funkce pro drag (tedy výběr textu), která měnila vzhled kurzoru
+	            // ale stejně to nefunguje :D
+	            this.canvas.ondragstart = function (e) {
+	                fn([e.pageX, e.pageY]), e.preventDefault();
+	            };
+	        }
+	    }, {
+	        key: 'onMousedown',
+	        value: function onMousedown(fn) {
+	            this.canvas.onmousedown = function (e) {
+	                fn([e.pageX, e.pageY]), e.preventDefault();
+	            };
+	        }
+	    }, {
+	        key: 'onMouseup',
+	        value: function onMouseup(fn) {
+	            this.canvas.onmouseup = function (e) {
+	                fn([e.pageX, e.pageY]), e.preventDefault();
+	            };
+	        }
+	    }, {
+	        key: 'onMove',
+	        value: function onMove(fn) {
+	            this.canvas.onmousemove = function (e) {
+	                fn([e.pageX, e.pageY]), e.preventDefault();
+	            };
+	        }
+	
+	        // Touch events
+	
+	    }, {
+	        key: 'onTouchstart',
+	        value: function onTouchstart(fn) {
+	            this.canvas.ontouchstart = function (e) {
+	                fn([e.changedTouches[0].pageX, e.changedTouches[0].pageY]), e.preventDefault();
+	            };
+	        }
+	    }, {
+	        key: 'onTouchend',
+	        value: function onTouchend(fn) {
+	            this.canvas.ontouchend = function (e) {
+	                fn([e.changedTouches[0].pageX, e.changedTouches[0].pageY]), e.preventDefault();
+	            };
+	        }
+	    }, {
+	        key: 'onTouchcancel',
+	        value: function onTouchcancel(fn) {
+	            this.canvas.ontouchcancel = function (e) {
+	                fn([e.changedTouches[0].pageX, e.changedTouches[0].pageY]), e.preventDefault();
+	            };
+	        }
+	    }, {
+	        key: 'onTouchmove',
+	        value: function onTouchmove(fn) {
+	            this.canvas.ontouchmove = function (e) {
+	                fn([e.changedTouches[0].pageX, e.changedTouches[0].pageY]), e.preventDefault();
+	            };
+	        }
+	    }, {
+	        key: 'getRatio',
+	        value: function getRatio() {
+	            return [this.canvas.width / 100, this.canvas.height / 100];
+	        }
+	    }, {
+	        key: 'getWidth',
+	        value: function getWidth() {
+	            return this.canvas.width;
+	        }
+	    }, {
+	        key: 'getHeight',
+	        value: function getHeight() {
+	            return this.canvas.height;
+	        }
+	
+	        //drawLine(from, to) {
+	        //    this.context.beginPath();
+	        //    this.context.moveTo(from[0], from[1]);
+	        //    this.context.lineTo(to[0], to[1]);
+	        //    this.context.stroke();
+	        //}
+	
+	        //drawLine2(from, to) {
+	        //    let ratio = this.getRatio();
+	
+	        //    this.context.beginPath();
+	        //    this.context.moveTo(from[0] * ratio[0], from[1] * ratio[1]);
+	        //    this.context.lineTo(to[0] * ratio[0], to[1] * ratio[1]);
+	        //    this.context.stroke();
+	        //}
+	
+	        //drawCurve(array, shift = [0, 0]) {
+	        //    for(let i = 1; i < array.length; i++) {
+	        //        this.drawLine2(
+	        //            [i - 1 + shift[0], -10*array[i - 1] + shift[1]],   // bylo bez 10*
+	        //            [i     + shift[0], -10*array[i]     + shift[1]]
+	        //        );
+	        //    }
+	        //}
+	
+	    }]);
+	
+	    return Canvas;
+	}();
+	
+	exports.default = new Canvas();
+
+/***/ }
+/******/ ]);
+//# sourceMappingURL=bundle.js.map
+    </script>
+</body>
+
+</html>

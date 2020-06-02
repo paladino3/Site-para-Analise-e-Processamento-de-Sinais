@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet" />
+    <link href="default.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="fonts.css" rel="stylesheet" type="text/css" media="all" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <title>Série Fourrier</title>
+    <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+    </head>
+
+    <body>
+        <div id="page" class="container">
+            <div id="header">
+                <div id="logo">
+                    <img src="images/pic02.jpg" alt="" />
+                    <h1><a href="index.html">Fourier</a></h1>
+                    <span>Jean Baptiste Joseph Fourier<a href="http://templated.co" rel="nofollow"></a></span>
+                </div>
+                <div id="menu">
+                    <ul class="cores">
+                        <li class="current_page_item"><a href="index.html" accesskey="1" title="">Home</a></li>
+                        <li class="current_page_item"><a href="seno.html" accesskey="2" title="">Sine</a></li>
+                        <li class="current_page_item"><a href="ondaQuadrada.html" accesskey="3" title="">Square</a></li>
+                        <li class="current_page_item"><a href="ondaDenteSerra.html" accesskey="4" title="">Swatooth</a>
+                        </li>
+                        <li class="current_page_item"><a href="#" accesskey="5" title="">Triangle</a></li>
+                        <li class="current_page_item"><a href="bonus.html" accesskey="6" title="">Bonus</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="main">
+                <div id="banner">
+                    <img src="images/.gif" alt="" class="image-full" />
+                </div>
+                <div id="welcome">
+                    <div class="title">
+                        <h2>Sawtooth Wave Approximation With Fourier Series</h2>
+                        <span class="byline">Aproximação de onda Onda dente de Serra com a série Fourier</span>
+
+                        <div id="featured">
+                            <div class="title">
+                                <h2>Onda dente de serra</h2>
+                                <span class="byline">Origem: Wikipédia, a enciclopédia livre.</span>
+                            </div>
+                            <ul class="style1">
+                                <li class="first">
+                                    <p class="date"><a href="#">Maio<b>28</b></a></p>
+                                    <h3></h3>
+                                    <p style="text-align: justify;">Uma <strong>onda dente de serra</strong> (ou
+                                        <strong>onda serra</strong>) é uma espécie de forma de onda não-senoidal básica.
+                                        Ela recebeu o nome dente de serra baseado em sua semelhança com a lâmina de uma
+                                        serra.
+                                        A função descontínua y = x - floor(x) é um exemplo de uma onda dente de serra
+                                        com período 1.
+                                        O som desta onda é desarmonioso e limpo, e seu espectro contém ambas as
+                                        harmônicas normais e estranhas da frequência fundamental. Devido ao fato de ela
+                                        conter todas as harmônicas inteiras, ela é considerada uma das melhores formas
+                                        de onda para a construção de outros sons, particularmente cordas, utilizando a
+                                        síntese subtrativa.
+                                        Esta onda pode ser construída utilizando a síntese aditiva. A série de Fourier
+                                        infinita
+                                    </p>
+                                    <img src="images/fswatooth.jpg" alt="fomula denteDeSerra"
+                                        style="position: relative; left: 50px;" width=450px height=100px>
+                                    <p style="text-align: justify;">
+                                        converge para uma onda dente de serra, onde <img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/7daff47fa58cdfd29dc333def748ff5fa4c923e3"> é a amplitude da
+                                        onda e <img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/132e57acb643253e7810ee9702d9581f159a1c61"> é a frequência da onda. Na síntese digital, a série é
+                                        apenas somada, de modo que a maior harmônica, Nmax, é menor que a frequência de
+                                        Nyquist (metade da frequência de amostra). Esta soma comumente pode ser
+                                        calculada de forma mais eficiente quando se utiliza a transformada rápida de
+                                        Fourier.
+                                        Se a forma de onda é criada digitalmente diretamente no domínio do tempo
+                                        utilizando uma forma sem limitação de banda, tal como y = x - floor(x),
+                                        infinitas harmônicas são inseridas no sinal, e o tom resultante contém distorção
+                                        de <a href="https://pt.wikipedia.org/wiki/Anti-aliasing"
+                                            style="display: inline-block;"> aliasing</a>.</p>
+                                    <img src="images/350px-Synthesis_sawtooth.gif" alt="gif denteDeSerra"
+                                        style="position: relative; left: 50px; width: 450px; height: 200px">
+                                </li>
+                                <!-- <button onclick="start()" class="float">Re-start</button> -->
+
+
+                                <!-- colocar a onda quadrada -->
+                                <style>
+                                    @import (css) url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+                                    canvas {
+                                        background: white;
+                                    }
+
+                                    input[type="range"] {
+                                        margin: 0;
+                                        padding: 0;
+                                        width: 420px;
+                                        position: absolute;
+                                        left: 910px;
+                                        margin: 5px;
+                                        display: inline;
+                                        vertical-align: middle;
+                                    }
+                                </style>
+
+                                <div>
+                                    <h3>Simulação: Onda dente de Serra</h3>
+                                    <canvas width="512" height="256"></canvas>
+                                    <div>
+                                        <span>Frequência</span>
+                                        <input frequency type="range" min="-4" max="-3" value="-3.5" step="0.0001">
+                                    </div>
+                                    <div>
+                                        <span>Ordem</span>
+                                        <input order type="range" min="0" max="16" value="4" step="1">
+                                    </div>
+                                    <div>
+                                        <!-- <span>Waveform</span> -->
+                                        <form id="waveform">
+                                            <!-- <label>OndaDenteDeSerra
+                                                <input type="radio" name="waveform" value="square" checked>
+                                            </label> -->
+                                            <label>
+                                                <input type="radio" name="waveform" value="sawtooth" checked
+                                                    style="display: none;">
+                                            </label>
+                                        </form>
+                                    </div>
+                                    <p>A ideia dessa visualização não é minha. Contudo
+                                        demonstra bem o princípio fundamental de qualquer série de Fourier. Você pode
+                                        aproximar qualquer forma de onda adicionando funções sinusais, representadas
+                                        aqui por círculos. Este é o original <a
+                                            href="https://commons.wikimedia.org/wiki/File:Fourier_series_square_wave_circles_animation.gif"
+                                            target="fourier" style="display: inline-block;">GIF</a></p>
+                                </div>
+
+                                <script>
+
+                                    var frequencyInput = document.querySelector("input[frequency]");
+                                    var orderInput = document.querySelector("input[order]");
+                                    var waveformInput = document.getElementById("waveform").elements["waveform"];
+                                    var canvas = document.querySelector("canvas");
+                                    var context = canvas.getContext("2d");
+
+                                    var TAU = Math.PI * 2.0;
+                                    var Scale = 64.0;
+                                    var time = 0.0;
+                                    var startTime = new Date().getTime();
+                                    var values = [];
+                                    var valuePointer = 0;
+                                    var x = 128.0,
+                                        y = 128.0;
+
+                                    function fourier(order) {
+                                        var phase = order * time * TAU;
+                                        var radius = 4.0 / (order * Math.PI) * Scale;
+                                        context.beginPath();
+                                        context.lineWidth = 1.0;
+                                        context.strokeStyle = "rgba(255,128,32,1.0)";
+                                        context.arc(x, y, radius, 0, TAU);
+                                        context.stroke();
+                                        context.strokeStyle = "rgba(255,255,255,0.4)";
+                                        context.moveTo(x, y);
+                                        x += Math.cos(phase) * radius;
+                                        y += Math.sin(phase) * radius;
+                                        context.lineTo(x, y);
+                                        context.stroke();
+                                    };
+
+                                    function connect() {
+                                        context.beginPath();
+                                        context.moveTo(x + 0.5, y + 0.5);
+                                        context.lineTo(256 + 0.5, y + 0.5);
+                                        context.strokeStyle = "rgba(255,255,32,1.0)";
+                                        context.stroke();
+                                    };
+
+                                    function drawWave() {
+                                        values[valuePointer++ & 255] = y;
+                                        context.beginPath();
+                                        context.strokeStyle = "rgba(0,255,0,1)";
+                                        context.moveTo(256 + 0.5, y + 0.5);
+                                        for (var i = 1; i < 256; ++i) {
+                                            context.lineTo(256 + i + 0.5, values[(valuePointer - i) & 255] + 0.5);
+                                        }
+                                        context.stroke();
+                                    }
+
+                                    (function frame() {
+                                        canvas.width = canvas.clientWidth;
+                                        canvas.height = canvas.clientHeight;
+                                        x = 144.0;
+                                        y = 128.0;
+                                        switch (waveformInput.value) {
+                                            case "square":
+                                                for (var order = 0; order <= orderInput.value; order++) {
+                                                    fourier((order << 1) + 1);
+                                                }
+                                                break;
+                                            case "sawtooth":
+                                                for (var order = 1; order <= orderInput.value; order++) {
+                                                    fourier(order << 1);
+                                                }
+                                                break;
+                                        }
+                                        connect();
+                                        drawWave();
+                                        var now = new Date().getTime();
+                                        time += (now - startTime) * Math.pow(10.0, frequencyInput.value);
+                                        startTime = now;
+                                        window.requestAnimationFrame(frame);
+                                    })();
+                                </script>
+
+                                <br><br>
+                                <li class="first">
+                                    <p class="date"><a href="#">Maio<b>28</b></a></p>
+                                    <br>
+                                    <h4 style="display: inline-block;">Disponível em<a href="http://mathworld.wolfram.com">http://mathworld.wolfram.com</a>Acesso em 28 de maio de 2020.</h4>
+                                    <br><br>
+                                    <h4>Script em Python: Série de Fourier da Onda Dente de Serra:</h4>
+                                    <p style="text-align: justify;">
+                                        <p>from pylab import *</p>
+                                        <p>from numpy import pi, arange </p>
+                                        <p>a = arange (-2*pi, 2*pi, 0.0 1) </p>
+                                        <p>b = 2*sin(a) </p>
+                                      <p>for n in range (2,1002,1): </p>
+                                            <p>b = b - 2.*((-1.)**n/n)*sin(n*a)</p>
+                                        
+                                        <p>subplot (231)</p>
+                                       <p>plot (a,b, 'b-')</p>
+                                      <p>ylabel ('f(x)')</p>
+                                         <p>grid (False)</p>
+                                      <p>title ('(a)')</p>
+                                       
+                                        <p>x = arange (-2*pi, 2*pi, 0.01)</p>
+                                        <p>y = -2*(-1)*sin(x)</p>
+                                        <p>for n in range (2,2,1):</p>
+                                            <p> y = y - 2.*((-1.)**n/n)*sin(n*x)</p>
+                                        
+                                        <p>subplot (232)</p>
+                                        <p>plot (a,b,'b-')</p>
+                                        <p>plot (x, y, 'r-')</p>
+                                        
+                                        <p>title ('n=1 (b)')</p>
+                                        
+                                        <p>x = arange (-2*pi, 2*pi, 0.01)</p>
+                                        <p>y = -2*(-1)*sin(x)</p>
+                                        <p>for n in range (2,6,1):</p>
+                                             <p>y = y - 2.*((-1.)**n/n)*sin(n*x)</p>
+                                        
+                                        <p>subplot (233)</p>
+                                        <p>plot (x, y, 'r-')</p>
+                                        <p>plot (a,b, 'b-')</p>
+                                        <p>title ('n=5 (c)')</p>
+                                        
+                                        
+                                        <p>x = arange (-2*pi, 2*pi, 0.01)</p>
+                                        <p>y = -2*(-1)*sin(x)</p>
+                                        <p>for n in range (2,32,1):</p>
+                                             <p>y = y - 2.*((-1.)**n/n)*sin(n*x)</p>
+                                        
+                                        
+                                        <p>subplot (234)</p>
+                                        <p>plot (a,b, 'b-')</p>
+                                        <p>plot (x, y, 'r-')</p>
+                                        <p>title ('n=31 (d)')</p> 
+                                        
+                                        
+                                        <p>ylabel ('f(x)')</p>
+                                        
+                                        <p>x = arange (-2*pi, 2*pi, 0.01)</p>
+                                        <p>y = -2*(-1)*sin(x)</p>
+                                        <p>for n in range (2,62,1):</p>
+                                             <p>y = y - 2.*((-1.)**n/n)*sin(n*x)</p>
+                                        
+                                        <p>subplot (235)</p>
+                                        <p>plot (x, y, 'r-')</p>
+                                        <p>plot (a,b,'b-')</p>
+                                        <p>title ('n=61 (e)')</p>
+                                        
+                                        <p>xlabel ('x')</p>
+                                        
+                                        <p>x = arange (-2*pi, 2*pi, 0.01)</p>
+                                        <p>y = -2*(-1)*sin(x)</p>
+                                        <p>for n in range (2,1002,1):</p>
+                                             <p>y = y - 2.*((-1.)**n/n)*sin(n*x)</p>
+                                        
+                                        <p>subplot (236)</p>
+                                        <p>plot (x, y, 'r-')</p>
+                                        <p>plot (a,b, 'b-')</p>
+                                        <p>title ('n=1001 (f)')</p>
+                                        
+                                        
+                                        <p>show ()</p>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div id="copyright">
+                            <span>&copy; Todos os Direitos Reservados. All rights reserved. | Photos by
+                                <a>Fotogrph</a></span>
+                            <span>Design by TEMPLATED</a>.</span>
+                        </div>
+                    </div>
+                </div>
+    </body>
+
+</html>

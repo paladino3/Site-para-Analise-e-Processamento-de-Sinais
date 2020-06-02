@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet" />
+    <link href="default.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="fonts.css" rel="stylesheet" type="text/css" media="all" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <title>Série Fourrier</title>
+    <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+    </head>
+
+    <body>
+        <div id="page" class="container">
+            <div id="header">
+                <div id="logo">
+                    <img src="images/pic02.jpg" alt="" />
+                    <h1><a href="index.html">Fourier</a></h1>
+                    <span>Jean Baptiste Joseph Fourier<a href="http://templated.co" rel="nofollow"></a></span>
+                </div>
+                <div id="menu">
+                    <ul class="cores">
+                        <li class="current_page_item"><a href="index.html" accesskey="1" title="">Home</a></li>
+                        <li class="current_page_item"><a href="seno.html" accesskey="2" title="">Sine</a></li>
+                        <li class="current_page_item"><a href="ondaQuadrada.html" accesskey="3" title="">Square</a></li>
+                        <li class="current_page_item"><a href="ondaDenteSerra.html" accesskey="4" title="">Swatooth</a></li>
+                        <li class="current_page_item"><a href="#" accesskey="5" title="">Triangle</a></li>
+                        <li class="current_page_item"><a href="bonus.html" accesskey="6" title="">Bonus</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="main">
+                <div id="banner">
+                    <img src="images/.gif" alt="" class="image-full" />
+                </div>
+                <div id="welcome">
+                    <div class="title">
+                        <h2>Sine Wave Approximation With Fourier Series</h2>
+                        <span class="byline">Aproximação de onda senoidal com a série Fourier</span>
+
+                        <div id="featured">
+                            <div class="title">
+                                <h2>Maecenas lectus sapien</h2>
+                                <span class="byline">Integer sit amet aliquet pretium</span>
+                            </div>
+                            <ul class="style1">
+                                <li class="first">
+                                    <p class="date"><a href="#">Jan<b>05</b></a></p>
+                                    <h3>Amet sed volutpat mauris</h3>
+                                    <p><a href="#">Consectetuer adipiscing elit. Nam pede erat, porta eu, lobortis eget,
+                                            tempus
+                                            et, tellus. Etiam neque. Vivamus consequat lorem at nisl. Nullam non wisi a
+                                            sem
+                                            semper eleifend. Etiam non felis. Donec ut ante.</a></p>
+                                </li>
+                                <!-- <button onclick="start()" class="float">Re-start</button> -->
+
+
+                                <!-- colocar a onda quadrada -->
+                                <style>
+                                    @import (css) url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+                                    canvas {
+                                        background: white;
+                                    }
+
+                                    input[type="range"] {
+                                        margin: 0;
+                                        padding: 0;
+                                        width: 420px;
+                                        position: absolute;
+                                        left: 910px;
+                                        margin: 5px;
+                                        display: inline;
+                                        vertical-align: middle;
+                                    }
+                                </style>
+
+                                <div>
+                                    <h3>Simulação: Onda Senoidal</h3>
+                                    <canvas width="512" height="256"></canvas>
+                                    <div>
+                                        <span>Frequência</span>
+                                        <input frequency type="range" min="-4" max="-3" value="-1.5" step="0.010">
+                                    </div>
+                                    <div>
+                                        <span></span>
+                                        <input order type="range" min="0" max="16" value="0" step="1" style="display: none;">
+                                    </div>
+                                    <div>
+                                        <!-- <span>Waveform</span> -->
+                                        <form id="waveform">
+                                            <label>
+                                                <input type="radio" name="waveform" value="square" checked style="display: none;">
+                                            </label>
+                                            <!-- <label>Sawtooth
+                                                <input type="radio" name="waveform" value="sawtooth">
+                                            </label> -->
+                                        </form>
+                                    </div>
+                                    <p>A ideia dessa visualização não é minha. Contudo
+                                        demonstra bem o princípio fundamental de qualquer série de Fourier. Você pode
+                                        aproximar qualquer forma de onda adicionando funções sinusais, representadas aqui por círculos. Este é o original <a href="https://commons.wikimedia.org/wiki/File:Fourier_series_square_wave_circles_animation.gif" target="fourier" style="display: inline-block;">GIF</a></p>
+                                </div>
+
+                                <script>
+
+                                    var frequencyInput = document.querySelector("input[frequency]");
+                                    var orderInput = document.querySelector("input[order]");
+                                    var waveformInput = document.getElementById("waveform").elements["waveform"];
+                                    var canvas = document.querySelector("canvas");
+                                    var context = canvas.getContext("2d");
+                                    
+                                    var TAU = Math.PI * 2.0;
+                                    var Scale = 64.0;
+                                    var time = 0.0;
+                                    var startTime = new Date().getTime();
+                                    var values = [];
+                                    var valuePointer = 0;
+                                    var x = 128.0,
+                                            y = 128.0;
+                                    
+                                    function fourier(order) {
+                                            var phase = order * time * TAU;
+                                            var radius = 4.0 / (order * Math.PI) * Scale;
+                                            context.beginPath();
+                                            context.lineWidth = 1.0;
+                                            context.strokeStyle = "rgba(255,128,32,1.0)";
+                                            context.arc(x, y, radius, 0, TAU);
+                                            context.stroke();
+                                            context.strokeStyle = "rgba(255,255,255,0.4)";
+                                            context.moveTo(x, y);
+                                            x += Math.cos(phase) * radius;
+                                            y += Math.sin(phase) * radius;
+                                            context.lineTo(x, y);
+                                            context.stroke();
+                                    };
+                                    
+                                    function connect() {
+                                            context.beginPath();
+                                            context.moveTo(x + 0.5, y + 0.5);
+                                            context.lineTo(256 + 0.5, y + 0.5);
+                                            context.strokeStyle = "rgba(255,255,32,1.0)";
+                                            context.stroke();
+                                    };
+                                    
+                                    function drawWave() {
+                                            values[valuePointer++ & 255] = y;
+                                            context.beginPath();
+                                            context.strokeStyle = "rgba(0,255,0,1)";
+                                            context.moveTo(256 + 0.5, y + 0.5);
+                                            for (var i = 1; i < 256; ++i) {
+                                                    context.lineTo(256 + i + 0.5, values[(valuePointer - i) & 255] + 0.5);
+                                            }
+                                            context.stroke();
+                                    }
+                                    
+                                    (function frame() {
+                                            canvas.width = canvas.clientWidth;
+                                            canvas.height = canvas.clientHeight;
+                                            x = 144.0;
+                                            y = 128.0;
+                                            switch (waveformInput.value) {
+                                                    case "square":
+                                                            for (var order = 0; order <= orderInput.value; order++) {
+                                                                    fourier((order << 1) + 1);
+                                                            }
+                                                            break;
+                                                    case "sawtooth":
+                                                            for (var order = 1; order <= orderInput.value; order++) {
+                                                                    fourier(order << 1);
+                                                            }
+                                                            break;
+                                            }
+                                            connect();
+                                            drawWave();
+                                            var now = new Date().getTime();
+                                            time += (now - startTime) * Math.pow(10.0, frequencyInput.value);
+                                            startTime = now;
+                                            window.requestAnimationFrame(frame);
+                                    })();
+                                    </script>
+
+                            </ul>
+                        </div>
+                        <div id="copyright">
+                            <span>&copy; Todos os Direitos Reservados. All rights reserved. | Photos by <a>Fotogrph</a></span>
+                            <span>Design by TEMPLATED</a>.</span>
+                        </div>
+                    </div>
+                </div>
+    </body>
+
+</html>
